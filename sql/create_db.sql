@@ -1,0 +1,2 @@
+DROP DATABASE IF EXISTS "loggr";
+CREATE DATABASE "loggr";
