@@ -4,5 +4,5 @@ create table IF NOT EXISTS exercises (
     body varchar(1000) not null default '',
     created timestamptz not null default now(),
     updated timestamptz not null default now(),
-    user_id serial REFERENCES user ON DELETE CASCADE
+    user_id serial REFERENCES users ON DELETE CASCADE
 );

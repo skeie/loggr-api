@@ -1,10 +1,11 @@
-var pgp = require('pg-promise')(/* options*/);
-var cn = {
-  host: 'localhost', // server name or IP address;
+const pgp = require('pg-promise')(/* options*/);
+const cn = {
+  host: 'localhost',
   port: 5432,
   database: 'loggr'
 };
-var db = pgp(cn);
+const url =  process.env.DATABASE_URL || 'localhost';
+var db = pgp(url);
 
 function pingPostgres() {
     // ping service

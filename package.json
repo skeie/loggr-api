@@ -3,10 +3,13 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "babel-node ./bin/www",
-    "dev": "nodemon ./bin/www --exec babel-node",
-    "debug": "nodemon --inspect ./bin/www --exec babel-node",
-    "build": "babel ./app.js -o ./index.js"
+    "dev": "NODE_ENV=prod nodemon ./server/app --exec babel-node",
+    "debug": "NODE_ENV=prod nodemon --inspect ./server/app --exec babel-node",
+    "clean": "rm -rf build && mkdir build",
+    "build-server": "./node_modules/.bin/babel -d ./build ./server -s",
+    "build": "npm run clean && npm run build-server",
+    "start": "NODE_ENV=prod node ./build/app.js"
+    
   },
   "dependencies": {
     "async": "^2.0.1",
@@ -22,7 +25,6 @@
     "serve-favicon": "~2.2.0"
   },
   "devDependencies": {
-    "babel": "^6.5.2",
     "babel-cli": "^6.16.0",
     "babel-eslint": "^6.1.2",
     "babel-preset-es2015": "^6.14.0",
