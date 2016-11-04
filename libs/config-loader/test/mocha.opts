@@ -1,0 +1,3 @@
+lib/**/*.test.js
+--require test/power-assert-instrumentation.js
+--reporter min

@@ -1,0 +1,3 @@
+client/**/*.test.js server/**/*.test.js
+--require node_modules/@finn-no/express-base/test-helpers/power-assert-instrumentation.js
+--reporter min

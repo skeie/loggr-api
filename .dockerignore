@@ -1,0 +1,9 @@
+node_modules/
+coverage/
+.nyc_output
+typings/
+docs/
+*.test.js
+# Dotfiles or dot dirs
+.*
+!.npmrc
