@@ -10,13 +10,14 @@ logger.setLogLevel(config.LOG_LEVEL);
 start();
 
 function start() {
-    logger.info('Starting worker');
+    logger.info(`Starting worker`);
 
-    const instance = MessageBus({ config });
+    const instance = MessageBus(config);
     instance.on('ready', beginWork);
     instance.on('lost', shutdown);
 
     function beginWork() {
+        logger.info(`Worker running with NODE_ENV=${config.NODE_ENV}!`);        
         instance.subscribeToMessageBus();
     }
 

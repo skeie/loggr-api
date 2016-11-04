@@ -17,14 +17,14 @@ const initialize = (config) => {
     // because singleton
     if (db) { return { db }; }
 
-    logger.info('Connecting to postgres: ', config.pgUrl);
+    console.log('Connecting to postgres: ', config.DB);
 
-    const psqlUrl = config.pgUrl;
+    const psqlUrl = config.DB;
     const pgp = require('pg-promise')(options); //eslint-disable-line
 
     db = pgp(psqlUrl);
 
-    if (config.isDev) {
+    if (config.NODE_ENV !== 'production') {
         const monitor = require('pg-monitor');
 
         monitor.attach(options, ['error', 'query']); // attach to all query events;

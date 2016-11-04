@@ -20,7 +20,7 @@ function Connector(config) {
             lost();
         });
 
-    this.queue = jackrabbit(config.rabbitUrl)
+    this.queue = jackrabbit(config.RABBIT)
         .on('connected', () => {
             logger.info('Rabbit connected');
             ready();

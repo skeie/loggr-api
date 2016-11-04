@@ -7,6 +7,6 @@ const { str } = require('envalid');
 module.exports = {
     DB: str({
         desc: 'Database connection',
-        default: 'postgres://postgres@$localhost/routes-dev',
+        default: 'postgres://postgres@localhost/routes-dev',
     }),
 };
