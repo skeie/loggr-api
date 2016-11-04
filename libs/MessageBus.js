@@ -34,7 +34,7 @@ MessageBus.prototype.onConnected = function () {
 };
 
 MessageBus.prototype.onReady = function () {
-    logger.info('App ready');
+    logger.info('Message bus ready');
     this.emit('ready');
 };
 

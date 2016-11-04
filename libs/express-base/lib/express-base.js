@@ -10,17 +10,25 @@ const security = require('./middleware/security');
 const userToken = require('./middleware/user-token');
 const deviceType = require('./middleware/device-type');
 const internalBackstageRoutes = require('./internal-backstage-routes');
+const dbHandler = require('../../db-handler');
 
 const metrics = require('./metrics');
 const makeErrorViewHandler = require('./middleware/error');
+
+const messageBus = require('../../MessageBus');
 
 const formParser = bodyParser.urlencoded;
 const jsonParser = bodyParser.json;
 
 exports.initialize = ({ config }) => {
 
+    const bus = messageBus(config);
+    bus.on('lost', process.exit);
+
     const app = express();
     app.locals.config = config;
+    app.locals.messageBus = bus;
+    app.locals.dbHandler = dbHandler.initialize().db;
     app.locals.urls = urls;
 
     app.use(jsonParser());

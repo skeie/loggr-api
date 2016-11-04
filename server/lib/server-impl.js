@@ -6,13 +6,17 @@ const { middleware, server } = require('../../libs/express-base');
 
 const events = require('./events');
 const metrics = require('./metrics');
+const apiV1 = require('../api/apiV1');
 
 function startApp ({ config, eventBus }) {
     const app = server.initialize(({ config, eventBus }));
 
     app.get('/internal-backstage/health/readiness', (req, res) => {
         eventBus.emit(events.readinessRequest);
-        res.sendStatus(204);
+        const db = req.app.locals.dbHandler;
+        db.oneOrNone('SELECT \'DBD::Pg ping test\'')
+        .then(() => res.sendStatus(204))
+        .catch(() => res.status(501).send('Service not available'));
     });
 
     app.get('/internal-backstage/health/liveness', (req, res) => {
@@ -21,10 +25,18 @@ function startApp ({ config, eventBus }) {
     });
 
     app.get('/', (req, res) => {
-            eventBus.emit(events.appRequest);
-            logger.info(`Hey from index via KUB_ENVIRONMENT "${config.KUB_ENVIRONMENT}" and NODE_ENV "${config.NODE_ENV}"`);
-            res.send({ message: 'Hello world' });
-        });
+        eventBus.emit(events.appRequest);
+        logger.info(`Hey from index via KUB_ENVIRONMENT "${config.KUB_ENVIRONMENT}" and NODE_ENV "${config.NODE_ENV}"`);
+        res.send({ message: 'Hello world' });
+    });
+
+    app.get('/', (req, res) => {
+        eventBus.emit(events.appRequest);
+        logger.info(`Hey from index via KUB_ENVIRONMENT "${config.KUB_ENVIRONMENT}" and NODE_ENV "${config.NODE_ENV}"`);
+        res.send({ message: 'Hello world' });
+    });
+
+    app.use('/api/v1', apiV1(app));
 
     metrics.startMonitoring({ eventBus, enable: config.METRICS_ENABLED });
 
