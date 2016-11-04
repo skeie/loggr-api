@@ -1,4 +1,4 @@
-const bindAll = require('lodash/bindAll');
+const bindAll = require('lodash.bindall');
 const exampleSql = require('./exampleSql');
 
 class RouteDAO {

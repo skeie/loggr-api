@@ -1,7 +1,7 @@
-const logger = require('../../configs/logger');
+const logger = require('../../../libs/fruits-logger');
 const ExampleService = require('./ExampleService');
 const Example = require('./ExampleModel');
-const bindAll = require('bindAll');
+const bindAll = require('lodash.bindall');
 
 
 class ExampleController {

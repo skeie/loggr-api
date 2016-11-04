@@ -1,6 +1,6 @@
 const ExampleDAO = require('./ExampleDAO');
 const logger = require('../../../libs/fruits-logger');
-const bindAll = require('bindAll');
+const bindAll = require('lodash.bindall');
 
 class ExampleService {
 
