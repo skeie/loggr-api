@@ -8,6 +8,7 @@
   },
   "license": "Unlicense",
   "dependencies": {
+    "axios": "^0.15.2",
     "bluebird": "^3.4.6",
     "body-parser": "^1.15.2",
     "bowser-cache": "^1.1.0",
@@ -63,13 +64,13 @@
     "start": "npm run start:server",
     "start:worker": "./worker/run.sh",
     "start:server": "./server/run.sh",
-    "start:server:debug": "sh ./server/run.sh -- --inspect --debug-brk",
+    "start:server:debug": "sh ./server/run.sh -- --inspect --debug",
     "start:server:watch": "nodemon -e js --exec 'sh' server/run.sh --watch 'server.js' --watch server/",
     "pretest": "npm run lint",
     "test": "mocha",
     "test:watch": "mocha --watch",
     "test:coverage": "nyc mocha",
     "test:coverage:report": "nyc --reporter=html mocha",
-    "test:debug": "npm run test:watch -- --inspect --debug-brk"
+    "test:debug": "npm run test:watch -- --inspect --debug"
   }
 }

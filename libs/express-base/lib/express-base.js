@@ -34,16 +34,16 @@ exports.initialize = ({ config }) => {
     app.use(jsonParser());
     app.use(formParser({ extended: true }));
     app.use(cookieParser());
-    app.use(security({
-        csrfProtection: config.CSRF_PROTECTION_ENABLED,
-        useSecureCsrfCookie: config.SECURE_CSRF_COOKIE_ENABLED,
-        enforceHttps: config.ENFORCE_HTTPS_ENABLED,
-        maxContentLength: config.MAX_CONTENT_LENGTH,
-        validateRedirects: config.VALIDATE_REDIRECTS_ENABLED,
-        validateRedirectHostnameWhitelist: [],
-        enableGlobalCors: config.GLOBAL_CORS_ENABLED,
-    }));
-    app.use(userToken(config.KUB_ENVIRONMENT));
+    // app.use(security({
+    //     csrfProtection: config.CSRF_PROTECTION_ENABLED,
+    //     useSecureCsrfCookie: config.SECURE_CSRF_COOKIE_ENABLED,
+    //     enforceHttps: config.ENFORCE_HTTPS_ENABLED,
+    //     maxContentLength: config.MAX_CONTENT_LENGTH,
+    //     validateRedirects: config.VALIDATE_REDIRECTS_ENABLED,
+    //     validateRedirectHostnameWhitelist: [],
+    //     enableGlobalCors: config.GLOBAL_CORS_ENABLED,
+    // }));
+    // app.use(userToken(config.KUB_ENVIRONMENT));
     app.use(deviceType);
 
     metrics.startMonitoring({ enable: config.METRICS_ENABLED });
