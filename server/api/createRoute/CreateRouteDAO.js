@@ -9,26 +9,20 @@ class CreateRouteDAO {
     }
 
     post(route) {
-        return this.insertRoute(route)
-        .then(res => {
-            const { id } = res[0];
-            return id;
-        })
-        .catch(err => err);
-    }
-
-    insertRoute (route, t) {
-        return this.resolveDb(t).query(
+        return this.resolveDb().query(
             getPostRouteQuery, [
                 route.title || 'DEFAULT',
                 route.description || '',
                 route.anyone_can_edit || false,
                 route.active || false,
             ]
-        );
+        ).then(res => {
+
+            const { id } = res[0];
+            return id;
+        })
+        .catch(err => err);
     }
-
-
 
     /**
      * Return either a transaction handler (if defined)

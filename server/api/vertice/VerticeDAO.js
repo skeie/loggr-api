@@ -15,12 +15,12 @@ class VerticeDAO {
      */
     resolveDb(t) { return t || this.db; }
 
-    createVertice(vertice) {
+    createVertice(vertice, t) {
         const query = 'insert into vertices (route_id, venue_id, title, description,' +
             ' type, color, price, foursquare_venue, instagram_venue, sort_order) values ' +
             '($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning id;';
 
-        return this.db.query(query, [
+        return this.resolveDb(t).query(query, [
             vertice.route_id,
             vertice.venue_id,
             vertice.title || '',

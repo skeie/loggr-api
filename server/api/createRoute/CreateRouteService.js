@@ -7,27 +7,26 @@ class CreateRouteService {
 
     constructor({ app }) {
         this.messageBus = app.locals.messageBus;
+        this.db = app.locals.dbHandler;
         this.createRouteDAO = new CreateRouteDAO({ app });
         this.verticeService = new VerticeService({ app });
 
         bindAll(this, 'postRoute');
     }
 
-    /**
-     * @param  {ExampleModel} example
-     */
-    postRoute(route) {
-
-        return this.createRouteDAO.post(route)
-            .then((routeId) => {
-                this.verticeService.createBasedOnList(route.vertices, routeId);
-                return { };
-            })
-            .catch((err) => {
-                logger.info('Failed to get examples: ', err, route);
-                throw err;
-            });
+    postRoute (route) {
+        return this.db.tx(async () => {
+            const routeId = await this.createRouteDAO.post(route);
+            return Promise.all(route.vertices.map((vertice) => (
+                this.verticeService.create(vertice, routeId)
+            ))
+            );
+        })
+        .then(data =>  data)
+        .catch(error =>  error)
     }
+
 }
 
 module.exports = CreateRouteService;
+

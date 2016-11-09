@@ -12,12 +12,6 @@ class CreateRouteController {
         bindAll(this, 'postRoute');
     }
 
-    ping (req, res, next) {
-        console.log('yolo 1338');
-
-        res.status(200).json({sap: 'sap'});
-    }
-
     postRoute(req, res, next) {
         const { route } = req.body;
 
@@ -30,12 +24,9 @@ class CreateRouteController {
         //     return next({ status: 401, message: errors });
         // }
 
-        // const example = new Example(data);
 
          return this.CreateRouteService.postRoute(route)
              .then((result) => {
-                 console.log('result', result);
-
                  res.status(200).json(result);
              })
              .catch((err) => next(err));

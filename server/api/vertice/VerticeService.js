@@ -3,24 +3,20 @@ const logger = require('../../../libs/fruits-logger');
 const bindAll = require('lodash.bindall');
 const spicesClient = require('../social/spiceClient');
 const VenueDAO = require('../venue/VenueDAO');
+const { get } = require('lodash');
 
 class CreateRouteService {
 
     constructor({ app }) {
         this.verticeDAO = new VerticeDAO({ app });
         this.venueDAO = new VenueDAO({ app });
-        // bindAll(this, 'postRoute');
+        this.db = app.locals.dbHandler;
+
+        bindAll(this, 'postRoute');
     }
 
-    createBasedOnList (vertices, routeId) {
-        const createVertice = [];
-        vertices.forEach(vertice => {
-            createVertice.push(this.create(vertice, routeId));
-        });
-        return Promise.all(createVertice);
-    }
+    create(data, routeId) {
 
-    create (data, routeId) {
 
         let verticeId, venueId, spicePollId, venueSocial;
 
@@ -42,14 +38,10 @@ class CreateRouteService {
                         sortorder: data.sortorder,
                         color: data.color,
                         price: data.price,
-                    });
+                    }, t);
                 })
                 .then((res) => {
-                    if (!res.rowCount) {
-                        return new Error('Failed to create vertice');
-                    }
-                    verticeId = res.rows[0].id;
-
+                    verticeId = get(res, '[0].id');
                     return spicesClient.putSpiceOnVenue(venueId, data.venue);
                 })
                 .then((venueOrPollId) => {
