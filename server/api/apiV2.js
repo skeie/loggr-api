@@ -6,7 +6,7 @@ function apiV2 (app) {
     const router = express.Router(); // eslint-disable-line new-cap
     const createRouteController = new CreateRouteController({ app });
 
-    router.post('/routes/postRoute', createRouteController.postRoute);
+    router.post('/routes', createRouteController.postRoute);
 
     return router;
 }

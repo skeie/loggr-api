@@ -1,5 +1,5 @@
-const getPostRouteQuery = 'insert into routes (title, description, anyone_can_edit, active) values ($1, $2, $3, $4) returning id';
+const CREATE = 'INSERT INTO routes (title, description, active) values ($1, $2, TRUE) RETURNING id';
 
 module.exports = {
-    getPostRouteQuery,
+    CREATE,
 };

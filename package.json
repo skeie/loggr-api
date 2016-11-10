@@ -4,7 +4,7 @@
   "description": "A node.js scaffolding app",
   "private": true,
   "engines": {
-    "node": "6"
+    "node": "7"
   },
   "license": "Unlicense",
   "dependencies": {
@@ -26,6 +26,7 @@
     "is-plain-object": "^2.0.1",
     "jackrabbit": "^2.3.0",
     "lodash.bindall": "^4.4.0",
+    "lodash.get": "^4.4.2",
     "lodash.isfunction": "^3.0.8",
     "node-uuid": "^1.4.7",
     "object.entries": "^1.0.3",

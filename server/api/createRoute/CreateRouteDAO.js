@@ -1,27 +1,28 @@
 const bindAll = require('lodash.bindall');
-const { getPostRouteQuery } = require('./createRoutesql');
+const logger = require('../../../libs/fruits-logger');
+const { CREATE } = require('./createRoutesql');
+
+const DEFAULT = 'DEFAULT'; 
 
 class CreateRouteDAO {
 
     constructor({ app }) {
         this.db = app.locals.dbHandler;
-        bindAll(this, 'post');
+        bindAll(this, 'createRoute');
     }
 
-    post(route) {
-        return this.resolveDb().query(
-            getPostRouteQuery, [
-                route.title || 'DEFAULT',
-                route.description || '',
-                route.anyone_can_edit || false,
-                route.active || false,
+    createRoute(route, tx) {
+        return this.resolveDb(tx).one(
+            CREATE, [
+                route.title || DEFAULT,
+                route.description || ''
             ]
-        ).then(res => {
-
-            const { id } = res[0];
-            return id;
-        })
-        .catch(err => err);
+        )
+        .then(res => res.id)
+        .catch(err => {
+            logger.info('Failed to create route', err);
+            throw err;
+        });
     }
 
     /**

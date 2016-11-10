@@ -8,11 +8,11 @@ const bindAll = require('lodash.bindall');
 class CreateRouteController {
 
     constructor({ app }) {
-        this.CreateRouteService = new CreateRouteService({ app });
+        this.createRouteService = new CreateRouteService({ app });
         bindAll(this, 'postRoute');
     }
 
-    postRoute(req, res, next) {
+    async postRoute(req, res, next) {
         const { route } = req.body;
 
         //req.check('city', 'city must be included').len(3).notEmpty();
@@ -24,12 +24,21 @@ class CreateRouteController {
         //     return next({ status: 401, message: errors });
         // }
 
+        const tempRoute = require('./testFixtures');
 
-         return this.CreateRouteService.postRoute(route)
-             .then((result) => {
-                 res.status(200).json(result);
-             })
-             .catch((err) => next(err));
+        try {
+            const id = await this.createRouteService.postRoute(tempRoute);
+            res.status(200).json({ id });
+
+        } catch(err) {
+            logger.info('Failed to create route', result);
+            res.status(401).send(result);
+        }
+         
+            //  .then((result) => {
+            //      res.status(200).json(result);
+            //  })
+            //  .catch((err) => next(err));
     }
 }
 
