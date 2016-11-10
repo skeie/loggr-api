@@ -73,7 +73,7 @@ class RouteWorker {
                     if (route && !route.mapPhoto) {
                         return createMapImage(routeId);
                     } else {
-                        return resolve();
+                        return resolve(null);
                     }
                 })
                 .then((result) => {
@@ -85,6 +85,7 @@ class RouteWorker {
                         return Promise.resolve();
                     }
                 })
+                .then(resolve)
                 .catch(reject);
         });
     }

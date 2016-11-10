@@ -12,4 +12,4 @@ function generateToken (mail, id, password, opts = {}) {
     return jwtToken.sign(payload, SECRET, tokenOpts);
 }
 
-module.exports = generateToken;
+module.exports.generateToken = generateToken;

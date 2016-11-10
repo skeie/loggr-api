@@ -5,11 +5,14 @@ const logger = require('../../libs/fruits-logger');
 const jwt = require('../../libs/jwt');
 
 // TODO: fix URI
-const imageServerURI = 'http://localhost:8003';
+const imageServerURI = 'http://localhost:8001';
 
 // TODO: swich with brakes
 const request = require('good-guy-http')({
-    timeout: 10000,
+
+    // map view screenshoot thing takes forever. 
+    // we'll have to wait
+    timeout: 20000,
     postprocess: false
 });
 
@@ -41,10 +44,11 @@ function createMapImage (routeId) {
             }
         })
         .then((res) => {
-            return res.body;
+            logger.debug(`Took screenshot ${res.body}`);
+            return resolve(res.body);
         })
         .catch((err) => {
-            logger.warn('Failed to createMapImage', err);
+            logger.error('Failed to createMapImage', err);
             reject(err);
         });
     });

@@ -116,7 +116,7 @@ MessageBus.prototype.handleTakeRouteScreenshot = function (job, ack) {
     try {
         logger.info(`[EXEC JOB] handleTakeRouteScreenshot ${job}`);
 
-        this.routeWorker.takeShot(job.routeId);
+        this.routeWorker.takeShot(job.routeId)
             .then(() => {
                 logger.debug('handleTakeRouteScreenshot() complete');
                 ack();
