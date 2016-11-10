@@ -31,6 +31,7 @@ class CreateRouteService extends BaseService {
                 await this.createRouteDAO.addVerticesToRoute(route.vertices || [], routeId, tx);
 
                 this.messageBus.publishNewRoute({ routeId });
+                this.messageBus.publishStoreDuration({ routeId });
 
                 logger.info('Created route', routeId);
                 return routeId;

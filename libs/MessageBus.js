@@ -8,13 +8,16 @@ const Promise = require('bluebird');
 const uuid = require('node-uuid');
 const EventEmitter = require('events').EventEmitter;
 const NotifyWorker = require('../worker/workers/NotifyWorker');
+const RouteWorker = require('../worker/workers/RouteWorker');
 const Notifications = require('../worker/workers/Notifications');
 
 const connections = require('./connections');
 
-const NEW_ROUTE_QUEUE = 'create.NEW_ROUTE_QUEUE';
+const NEW_ROUTE_SEND_EMAIL_QUEUE = 'create.NEW_ROUTE_SEND_EMAIL_QUEUE';
+// const NEW_ROUTE_TAKE_SCREENSHOT_QUEUE = 'create.NEW_ROUTE_TAKE_SCREENSHOT_QUEUE';
+const NEW_ROUTE_STORE_DURATION_QUEUE = 'create.NEW_ROUTE_STORE_DURATION_QUEUE';
 
-function MessageBus (config) {
+function MessageBus(config) {
     EventEmitter.call(this);
 
     this.config = config;
@@ -23,16 +26,18 @@ function MessageBus (config) {
     this.connections.once('lost', this.onLost.bind(this));
 
     this.notifyWorker = new NotifyWorker({ config, dbHandler: this.connections.db });
+    this.routeWorker = new RouteWorker({ config, dbHandler: this.connections.db });
 }
 
 MessageBus.prototype = Object.create(EventEmitter.prototype);
 
 MessageBus.prototype.onConnected = function () {
     let queues = 0;
-    const QUEUE_COUNT = 1;
-    this.connections.queue.create(NEW_ROUTE_QUEUE, { prefetch: 5 }, onCreate.bind(this));
+    const QUEUE_COUNT = 2;
+    this.connections.queue.create(NEW_ROUTE_SEND_EMAIL_QUEUE, { prefetch: 5 }, onCreate.bind(this));
+    this.connections.queue.create(NEW_ROUTE_STORE_DURATION_QUEUE, { prefetch: 5 }, onCreate.bind(this));
 
-    function onCreate () {
+    function onCreate() {
         if (++queues === QUEUE_COUNT) { this.onReady(); }
     }
 };
@@ -49,7 +54,8 @@ MessageBus.prototype.onLost = function () {
 
 MessageBus.prototype.subscribeToMessageBus = function () {
     logger.debug('Subscribing to queue');
-    this.connections.queue.handle(NEW_ROUTE_QUEUE, this.handleNewRoute.bind(this));
+    this.connections.queue.handle(NEW_ROUTE_SEND_EMAIL_QUEUE, this.handleSendNewRouteEmail.bind(this));
+    this.connections.queue.handle(NEW_ROUTE_SEND_EMAIL_QUEUE, this.handleStoreDuration.bind(this));
     return this;
 };
 
@@ -59,32 +65,47 @@ MessageBus.prototype.subscribeToMessageBus = function () {
 */
 
 /**
- * @param  {Object} job active, routeId
+ * @param  {Object} job routeId
  * @param  {Function} ack
  */
-MessageBus.prototype.handleNewRoute = function (job, ack) {
+MessageBus.prototype.handleSendNewRouteEmail = function (job, ack) {
     try {
-        logger.info(`[EXEC JOB] New route`, job);
-        const promises = [];
+        logger.info(`[EXEC JOB] New route ${job}`);
+        // promises.push(this.routeWorker.takeShot(job.routeId));
 
-        if (!job.active) {
-            promises.push(this.notifyWorker.notify(Object.assign({ command: Notifications.NEW_ROUTE }, job)));
-            // promises.push(this.routeWorker.takeShot(job.routeId));
-        }
-        // promises.push(this.routeWorker.saveDirectionsData({ id: job.routeId }));
-
-        Promise.all(promises)
+        this.notifyWorker.notify(Object.assign({ command: Notifications.NEW_ROUTE }, job))
             .then(() => {
-                logger.debug('handleNewRoute() complete');
+                logger.debug('handleSendNewRouteEmail() complete');
                 ack();
             })
             .catch((error) => {
-                logger.warn({what: `handleNewRoute failed`, args: JSON.stringify(job), error});
+                logger.warn({ what: 'handleSendNewRouteEmail failed', args: JSON.stringify(job), error });
             });
     } catch (error) {
-        logger.warn({what: `handleNewRoute threw up`, args: JSON.stringify(job)}, error);
+        logger.warn({ what: 'handleSendNewRouteEmail threw up', args: JSON.stringify(job) }, error);
     }
-}
+};
+
+/**
+ * @param  {Object} job routeId
+ * @param  {Function} ack
+ */
+MessageBus.prototype.handleStoreDuration = function (job, ack) {
+    try {
+        logger.info(`[EXEC JOB] Store duration ${job}`);
+
+        this.routeWorker.storeDuration(job)
+            .then(() => {
+                logger.debug('handleStoreDuration() complete');
+                ack();
+            })
+            .catch((error) => {
+                logger.warn({ what: 'handleStoreDuration failed', args: JSON.stringify(job), error });
+            });
+    } catch (error) {
+        logger.warn({ what: 'handleStoreDuration threw up', args: JSON.stringify(job) }, error);
+    }
+};
 
 
 /**
@@ -93,11 +114,19 @@ MessageBus.prototype.handleNewRoute = function (job, ack) {
 
 
 /**
- * @param  {Object} msg active, routeId
+ * @param  {Object} msg routeId
  */
 MessageBus.prototype.publishNewRoute = function (msg) {
     logger.info('Publish new route', msg);
-    this.connections.queue.publish(NEW_ROUTE_QUEUE, msg);
+    this.connections.queue.publish(NEW_ROUTE_SEND_EMAIL_QUEUE, msg);
+}
+
+/**
+ * @param  {Object} msg routeId
+ */
+MessageBus.prototype.publishStoreDuration = function (msg) {
+    logger.info('Publish store duration', msg);
+    this.connections.queue.publish(NEW_ROUTE_STORE_DURATION_QUEUE, msg);
 }
 
 

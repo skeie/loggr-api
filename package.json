@@ -23,6 +23,7 @@
     "express": "^4.14.0",
     "express-mung": "^0.4.6",
     "express-validator": "^2.21.0",
+    "good-guy-http": "^1.7.3",
     "helmet": "^3.1.0",
     "is-plain-object": "^2.0.1",
     "jackrabbit": "^2.3.0",

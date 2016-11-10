@@ -8,7 +8,7 @@ class NotifyWorker {
     constructor ({ config, dbHandler }) {
         this.emailClient = new EmailClient({ config });
         this.dbHandler = dbHandler;
-        bindAll(this, 'notify')
+        bindAll(this, 'notify');
     }
 
     notify (job) {
