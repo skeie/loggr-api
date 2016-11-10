@@ -7,10 +7,12 @@ const logger = require('./fruits-logger');
 const Promise = require('bluebird');
 const uuid = require('node-uuid');
 const EventEmitter = require('events').EventEmitter;
+const NotifyWorker = require('../worker/workers/NotifyWorker');
+const Notifications = require('../worker/workers/Notifications');
 
 const connections = require('./connections');
 
-const EXAMPLE_QUEUE = 'jobs.EXAMPLE_QUEUE';
+const NEW_ROUTE_QUEUE = 'create.NEW_ROUTE_QUEUE';
 
 function MessageBus (config) {
     EventEmitter.call(this);
@@ -19,6 +21,8 @@ function MessageBus (config) {
     this.connections = connections(config);
     this.connections.once('ready', this.onConnected.bind(this));
     this.connections.once('lost', this.onLost.bind(this));
+
+    this.notifyWorker = new NotifyWorker({ config, dbHandler: this.connections.db });
 }
 
 MessageBus.prototype = Object.create(EventEmitter.prototype);
@@ -26,7 +30,7 @@ MessageBus.prototype = Object.create(EventEmitter.prototype);
 MessageBus.prototype.onConnected = function () {
     let queues = 0;
     const QUEUE_COUNT = 1;
-    this.connections.queue.create(EXAMPLE_QUEUE, { prefetch: 5 }, onCreate.bind(this));
+    this.connections.queue.create(NEW_ROUTE_QUEUE, { prefetch: 5 }, onCreate.bind(this));
 
     function onCreate () {
         if (++queues === QUEUE_COUNT) { this.onReady(); }
@@ -44,30 +48,58 @@ MessageBus.prototype.onLost = function () {
 };
 
 MessageBus.prototype.subscribeToMessageBus = function () {
-    this.connections.queue.handle(EXAMPLE_QUEUE, this.handlePublishExampleJob.bind(this));
+    logger.debug('Subscribing to queue');
+    this.connections.queue.handle(NEW_ROUTE_QUEUE, this.handleNewRoute.bind(this));
     return this;
 };
 
-MessageBus.prototype.publishExampleJob = function (requestId) {    
-    this.connections.queue.publish(EXAMPLE_QUEUE, { requestId });
-    return Promise.resolve(requestId);
-};
 
-MessageBus.prototype.handlePublishExampleJob = function (job, ack) {
-    logger.log({ type: 'info', msg: 'handling job', queue: EXAMPLE_QUEUE, url: job.url });
-    
-    onSuccess();
+/*
+* HANDLERS API
+*/
 
-    function onSuccess () {
-        logger.info({ type: 'info', msg: 'job complete', status: 'success', url: job.url });
-        ack();
+/**
+ * @param  {Object} job active, routeId
+ * @param  {Function} ack
+ */
+MessageBus.prototype.handleNewRoute = function (job, ack) {
+    try {
+        logger.info(`[EXEC JOB] New route`, job);
+        const promises = [];
+
+        if (!job.active) {
+            promises.push(this.notifyWorker.notify(Object.assign({ command: Notifications.NEW_ROUTE }, job)));
+            // promises.push(this.routeWorker.takeShot(job.routeId));
+        }
+        // promises.push(this.routeWorker.saveDirectionsData({ id: job.routeId }));
+
+        Promise.all(promises)
+            .then(() => {
+                logger.debug('handleNewRoute() complete');
+                ack();
+            })
+            .catch((error) => {
+                logger.warn({what: `handleNewRoute failed`, args: JSON.stringify(job), error});
+            });
+    } catch (error) {
+        logger.warn({what: `handleNewRoute threw up`, args: JSON.stringify(job)}, error);
     }
+}
 
-    // function onError () {
-    //     logger.info({ type: 'info', msg: 'job complete', status: 'failure', url: job.url });
-    //     ack();
-    // }
-};
+
+/**
+ * PUBLISH API
+ */
+
+
+/**
+ * @param  {Object} msg active, routeId
+ */
+MessageBus.prototype.publishNewRoute = function (msg) {
+    logger.info('Publish new route', msg);
+    this.connections.queue.publish(NEW_ROUTE_QUEUE, msg);
+}
+
 
 module.exports = function createApp (config) {
     return new MessageBus(config);

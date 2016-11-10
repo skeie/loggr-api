@@ -40,6 +40,7 @@
     "read-pkg": "^2.0.0",
     "read-pkg-up": "^2.0.0",
     "require-dir": "^0.3.1",
+    "sendgrid": "^2.0.0",
     "url-join": "^1.1.0",
     "verror": "^1.8.1",
     "yargs": "^6.3.0"
