@@ -5,14 +5,14 @@ const get = require('lodash.get');
 const isNumber = require('lodash.isnumber');
 const logger = require('../../libs/fruits-logger');
 const calculateVerticeDistances = require('./calculateVerticeDistances');
+const { createMapImage } = require('./uploadPhotoService');
 
 
 class RouteWorker {
 
     constructor ({ dbHandler }) {
-        // this.takeMapShot = props.takeMapShot || require('./takeMapShot');
          this.dbHandler = dbHandler;
-         bindAll(this, 'storeDuration', 'mapDurationAndDistance', 'updateRoute');
+         bindAll(this, 'storeDuration', 'mapDurationAndDistance', 'updateRoute', 'takeShot');
     }
 
     storeDuration (job) {
@@ -63,24 +63,33 @@ class RouteWorker {
         }
     }
 
-    // takeShot (id) {
-    //     if (!id) {
-    //         throw new Error('Missing id in takeShot()');
-    //     }
-    //     return new Promise((resolve, reject) => {
-    //         queryRouteDetail({routeId: id, populate: ['map_photo AS "mapPhoto"']})
-    //         .then((route) => {
-    //             if (route && !route.mapPhoto) {
-    //                 return this.takeMapShot(id);
-    //             } else {
-    //                 resolve();
-    //             }
-    //         }).catch(reject);
-    //     });
-    // }
+    takeShot (routeId) {
+        if (!routeId) { return Promise.reject(`Missing id in takeShot() ${routeId}`) };
+
+        return new Promise((resolve, reject) => {
+
+            return this.dbHandler.one('SELECT * FROM routes WHERE id=$1', [routeId])
+                .then((route) => {
+                    if (route && !route.mapPhoto) {
+                        return createMapImage(routeId);
+                    } else {
+                        return resolve();
+                    }
+                })
+                .then((result) => {
+                    if (result) {
+                        logger.info('Created map shot', result);
+                        return this.dbHandler.none('UPDATE routes SET map_photo=$1', [result]);
+                    } else {
+                        logger.info(`Take shot - No photo was taken ${routeId}`);
+                        return Promise.resolve();
+                    }
+                })
+                .catch(reject);
+        });
+    }
+
     /*
-
-
     * calls save on image service
     *       * sends the images to S3
     *       * deletes local references

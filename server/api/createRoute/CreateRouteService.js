@@ -32,6 +32,7 @@ class CreateRouteService extends BaseService {
 
                 this.messageBus.publishNewRoute({ routeId });
                 this.messageBus.publishStoreDuration({ routeId });
+                this.messageBus.publishTakeRouteScreenshot({ routeId });
 
                 logger.info('Created route', routeId);
                 return routeId;

@@ -4,9 +4,6 @@ import Promise from 'bluebird';
 
 function takeMapShot (id) {
     return new Promise((resolve, reject) => {
-        if (!id) {
-            return reject({message: 'takeShot - routeid must be defined'});
-        }
 
         createMapImage(id)
         .then((result) => {

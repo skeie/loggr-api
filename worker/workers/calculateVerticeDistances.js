@@ -54,7 +54,7 @@ function postDistanceMatrix ({ routeId, travelmode, venues, force }) {
     const body = {
         routeId,
         venues,
-        force: false,
+        force: true,
     };
 
     logger.info('Posting distance matrix: ', body);
