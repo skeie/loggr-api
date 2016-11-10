@@ -1,3 +1,4 @@
-client/**/*.test.js server/**/*.test.js
---require node_modules/@finn-no/express-base/test-helpers/power-assert-instrumentation.js
+server/**/*.test.js
+--require server/api/testHelpers/power-assert-instrumentation.js
 --reporter min
+--timeout 5000

@@ -15,6 +15,9 @@ const DEFAULT_CONFIG = {
     CSRF_PROTECTION_ENABLED: true,
     METRICS_ENABLED: false,
     ENFORCE_HTTPS_ENABLED: false,
+    LOG_LEVEL: 'TRACE',
+    DB: 'postgres://postgres@localhost/routes-test',
+    RABBIT: 'amqp://localhost'
 };
 
 function makeApp (config) {

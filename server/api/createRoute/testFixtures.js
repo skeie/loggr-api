@@ -1,13 +1,13 @@
 const route = {
     cardLabeled: null,
-    userId: 13377331,
+    userId: 1,
     active: true,
     created: new Date(),
-    buckets: [],
-    city: 'Oslo',
-    title: 'Hello my name is 2pac',
+    buckets: ['nihao', 'hammertime', 'jerusalem'],
+    city: 'City of love',
+    title: 'Tourist trap',
     isPrivate: false,
-    description: 'YOLO ASS KICK ASS RUTE',
+    description: 'Hello. is it me. your looking for',
     _links: null,
     id: '1478071846097',
     likes: [],
@@ -41,7 +41,7 @@ const route = {
         sortorder: 1,
         photos: [],
         capturedPhoto: [],
-        buckets: [],
+        buckets: ['nihao', 'yolo', 'lolcat'],
     },
 
     {
@@ -69,8 +69,15 @@ const route = {
             website: null,
             id: '4aede7a8f964a52010d021e3', // can also be yelp.<id>
         },
-        sortorder: 1,
-        photos: [],
+        sortorder: 2,
+        photos: [
+            {
+                url: 'www.someimg.png',
+                photoSource: 'foursquare',
+                externalLink: 'www.fourswuare/id/nihao',
+                username: 'Tom morello'
+            }
+        ],
         capturedPhoto: [],
         buckets: [],
     },
@@ -100,7 +107,7 @@ const route = {
             website: null,
             id: '4aede7a8f964a52010d021e3', // can also be yelp.<id>
         },
-        sortorder: 1,
+        sortorder: 3,
         photos: [],
         capturedPhoto: [],
         buckets: [],

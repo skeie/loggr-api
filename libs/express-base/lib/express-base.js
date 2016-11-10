@@ -3,6 +3,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
+const expressValidator = require('express-validator');
 const logger = require('../../fruits-logger');
 const urls = require('../../platform-urls');
 
@@ -30,10 +31,10 @@ exports.initialize = ({ config }) => {
     app.locals.messageBus = bus;
     app.locals.dbHandler = dbHandler.initialize().db;
     app.locals.urls = urls;
-
     app.use(jsonParser());
     app.use(formParser({ extended: true }));
     app.use(cookieParser());
+    app.use(expressValidator());
     // app.use(security({
     //     csrfProtection: config.CSRF_PROTECTION_ENABLED,
     //     useSecureCsrfCookie: config.SECURE_CSRF_COOKIE_ENABLED,

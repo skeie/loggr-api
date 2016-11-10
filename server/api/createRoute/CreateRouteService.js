@@ -19,21 +19,19 @@ class CreateRouteService extends BaseService {
 
             try {
                 const routeId = await this.createRouteDAO.createRoute(route, tx);
-                this.createRouteDAO.createBuckets();
+                await this.createRouteDAO.addBucketsToRoute(route.buckets || [], routeId, tx);
+                await this.createRouteDAO.addRouteAdmin(route.userId, routeId, tx);
+                await this.createRouteDAO.addVerticesToRoute(route.vertices || [], routeId, tx);
 
                 // TODO: continue here :)
-                console.log('SAPPERN NÅ ', routeId);
+                logger.info('Created route', routeId);
                 return routeId;
 
             } catch (err) {
                 logger.info('Failed to create route', err);
+                console.error('ERROR ', err);
                 throw err;
             }
-
-            // .then((result) => {
-            //     console.log('sappern ', result);
-            //     return result;
-            // });
 
             // save route meta
                 // save route buckets
@@ -46,6 +44,7 @@ class CreateRouteService extends BaseService {
 
             // save duration
             // save distance
+            // send email
             // take screenshot
             // create card
             // flush redis cache
