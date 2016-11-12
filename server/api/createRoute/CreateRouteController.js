@@ -28,14 +28,14 @@ class CreateRouteController {
         const tempRoute = require('./testFixtures');
 
         try {
-            const id = await this.createRouteService.postRoute(tempRoute);
+            const id = await this.createRouteService.postRoute(route);
             res.status(201).json({ id });
 
         } catch(err) {
             logger.info('Failed to create route', err);
-            res.status(401).send(err);
+            res.status(400).send(err);
         }
-         
+
             //  .then((result) => {
             //      res.status(200).json(result);
             //  })
