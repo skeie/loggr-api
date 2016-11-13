@@ -4,14 +4,15 @@ const Promise = require('bluebird');
 const get = require('lodash.get');
 const isNumber = require('lodash.isnumber');
 const logger = require('../../libs/fruits-logger');
-const calculateVerticeDistances = require('./calculateVerticeDistances');
+const CalculateDistancesClient = require('./CalculateDistancesClient');
 const { createMapImage } = require('./uploadPhotoService');
 
 
 class RouteWorker {
 
-    constructor ({ dbHandler }) {
+    constructor ({ config, dbHandler }) {
          this.dbHandler = dbHandler;
+         this.calculateDistances = new CalculateDistancesClient({ config, dbHandler });
          bindAll(this, 'storeDuration', 'mapDurationAndDistance', 'updateRoute', 'takeShot');
     }
 
@@ -22,7 +23,7 @@ class RouteWorker {
             return Promise.reject('routeId not defined in storeDuration() ');
         }
 
-        return calculateVerticeDistances({ routeId, dbHandler: this.dbHandler })
+        return this.calculateDistances.calculate({ routeId, dbHandler: this.dbHandler })
         .then((res) => {
             return this.updateRoute(routeId, this.mapDurationAndDistance(routeId, res));
         })
