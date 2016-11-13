@@ -5,7 +5,7 @@ const get = require('lodash.get');
 const isNumber = require('lodash.isnumber');
 const logger = require('../../libs/fruits-logger');
 const CalculateDistancesClient = require('./CalculateDistancesClient');
-const { createMapImage } = require('./uploadPhotoService');
+const UploadPhotoClient = require('./UploadPhotoClient');
 
 
 class RouteWorker {
@@ -13,6 +13,7 @@ class RouteWorker {
     constructor ({ config, dbHandler }) {
          this.dbHandler = dbHandler;
          this.calculateDistances = new CalculateDistancesClient({ config, dbHandler });
+         this.uploadPhotoClient = new UploadPhotoClient({ config });
          bindAll(this, 'storeDuration', 'mapDurationAndDistance', 'updateRoute', 'takeShot');
     }
 
@@ -72,7 +73,7 @@ class RouteWorker {
             return this.dbHandler.one('SELECT * FROM routes WHERE id=$1', [routeId])
                 .then((route) => {
                     if (route && !route.mapPhoto) {
-                        return createMapImage(routeId);
+                        return this.uploadPhotoClient.createMapImage(routeId);
                     } else {
                         return resolve(null);
                     }
