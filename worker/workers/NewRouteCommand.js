@@ -37,7 +37,7 @@ class NewRouteCommand {
             return this.emailClient.sendGridMail(mailOpts, notificationType);
         })
         .catch((err) => {
-            logger.warn(`Failed to send new route email. routeId: ${routeId}. Error: ${err}`);
+            logger.warn(`Failed to send new route email. routeId: ${routeId}`, err);
             throw err;
         });
     }

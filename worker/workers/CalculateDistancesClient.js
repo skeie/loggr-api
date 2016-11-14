@@ -78,7 +78,7 @@ class CalculateDistancesClient {
         })
             .then((res) => res.body)
             .catch((err) => {
-                logger.warn({ what: 'createDistanceMatrix()-failed', err: (err ? err.message : '') });
+                logger.warn('createDistanceMatrix()-failed', err);
                 throw err;
             });
     }

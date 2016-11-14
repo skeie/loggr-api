@@ -39,6 +39,6 @@ module.exports = function () {
          * status immediately, and rendering fails, the next step
          * in the error handling chain is not able to send headers.
          */
-        res.send('Something went wrong!');
+        res.json({ message: 'Something went wrong!' });
     };
 };

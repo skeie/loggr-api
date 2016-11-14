@@ -22,14 +22,14 @@ const DEFAULT = 'DEFAULT';
 
 class CreateRouteDAO extends BaseDAO {
 
-    constructor({ app }) {
+    constructor ({ app }) {
         super({ app });
         bindAll(this, 'createRoute', 'addBucketsToRoute', 'addBucketToRoute', 
             'addRouteAdmin', 'addVerticesToRoute', 'addVerticeToRoute', 'upsertVenue',
             'addPhotosToVertice', 'addBucketsToVertice');
     }
 
-    createRoute(route, tx) {
+    createRoute (route, tx) {
         return this.resolveDb(tx).one(
             CREATE, [
                 route.title || DEFAULT,
@@ -44,12 +44,12 @@ class CreateRouteDAO extends BaseDAO {
             });
     }
 
-    addBucketsToRoute(bucketNames, routeId, tx) {
+    addBucketsToRoute (bucketNames, routeId, tx) {
         return Promise.all(bucketNames.map(b => 
             this.addBucketToRoute((b || '').toLowerCase(), routeId, tx)));
     }
 
-    addBucketToRoute(bucketName, routeId, tx) {
+    addBucketToRoute (bucketName, routeId, tx) {
         return this
             .resolveDb(tx)
             .none(UPSERT_BUCKET, [bucketName])
@@ -97,8 +97,8 @@ class CreateRouteDAO extends BaseDAO {
         // source ids (yelp_id, foursquare_id etc) are varchars
         const NON_EXISTING_SOURCE_ID = 'NON_EXISTING_ROUTES_SOURCE_ID';
 
-        const yelpId = venue.yelp_id || NON_EXISTING_SOURCE_ID;
-        const foursquareId = venue.foursquare_id || NON_EXISTING_SOURCE_ID;
+        const yelpId = venue.yelpId || NON_EXISTING_SOURCE_ID;
+        const foursquareId = venue.foursquareId || NON_EXISTING_SOURCE_ID;
         const googleId = venue.place_id || venue.googleId || NON_EXISTING_SOURCE_ID;
 
         // venueId are usually temporary generated strings in routes-native 
@@ -117,8 +117,8 @@ class CreateRouteDAO extends BaseDAO {
 
                 // venue did not exist, create it
                 tx.one(CREATE_VENUE, [
-                    venue.yelp_id, 
-                    venue.foursquare_id,
+                    venue.yelpId, 
+                    venue.foursquareId,
                     venue.place_id || venue.googleId,
                     venue.geometry,
                     venue.address,
@@ -140,7 +140,7 @@ class CreateRouteDAO extends BaseDAO {
         }));
     }
 
-    addBucketsToVertice(buckets = [], verticeId, tx) {
+    addBucketsToVertice (buckets = [], verticeId, tx) {
         const mappedBuckets = buckets.map(b => b.toLowerCase());
 
         // upsert buckets

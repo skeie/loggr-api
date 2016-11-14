@@ -17,22 +17,23 @@ class CreateRouteController {
     async postRoute(req, res, next) {
         const { route } = req.body;
 
-        req.check('title', 'title must be included').len(3).notEmpty();
-        req.check('city', 'city must be included').len(3).notEmpty();
-        req.check('userId', 'user id must be included').isInt().notEmpty();
+        req.check(['route', 'title'], 'title must be included').len(3).notEmpty();
+        req.check(['route', 'userId'], 'user id must be included').isInt().notEmpty();
 
         const errors = req.validationErrors();
         if (errors) {
-            return next({ status: 401, message: errors });
+            logger.info('Create route validation errors', null, {extras: errors})
+            return res.status(400).json(errors);
         }
 
         try {
             const id = await this.createRouteService.postRoute(route);
+            logger.info(`Route created! ${id}`);
             res.status(201).json({ id });
 
         } catch(err) {
             logger.info('Failed to create route', err);
-            res.status(400).send(err);
+            res.status(400).json(err);
         }
     }
 }

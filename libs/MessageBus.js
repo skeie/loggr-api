@@ -80,10 +80,10 @@ MessageBus.prototype.handleSendNewRouteEmail = function (job, ack) {
                 ack();
             })
             .catch((error) => {
-                logger.warn({ what: 'handleSendNewRouteEmail failed', args: JSON.stringify(job), error });
+                logger.warn('handleSendNewRouteEmail failed', error, { extras: { args: JSON.stringify(job) } } );
             });
     } catch (error) {
-        logger.warn({ what: 'handleSendNewRouteEmail threw up', args: JSON.stringify(job) }, error);
+        logger.warn('handleSendNewRouteEmail threw up', error, { extras: { args: JSON.stringify(job) } } );
     }
 };
 
@@ -101,10 +101,10 @@ MessageBus.prototype.handleStoreDuration = function (job, ack) {
                 ack();
             })
             .catch((error) => {
-                logger.warn({ what: 'handleStoreDuration failed', args: JSON.stringify(job), error });
+                logger.warn('handleStoreDuration failed', error, { extras: { args: JSON.stringify(job) } } );
             });
     } catch (error) {
-        logger.warn({ what: 'handleStoreDuration threw up', args: JSON.stringify(job) }, error);
+        logger.warn('handleStoreDuration threw up', { extras: { args: JSON.stringify(job) } } );
     }
 };
 
@@ -122,10 +122,10 @@ MessageBus.prototype.handleTakeRouteScreenshot = function (job, ack) {
                 ack();
             })
             .catch((error) => {
-                logger.warn({ what: 'handleTakeRouteScreenshot failed', args: JSON.stringify(job), error });
+                logger.warn('handleTakeRouteScreenshot failed', error, { extras: { args: JSON.stringify(job) } } );
             });
     } catch (error) {
-        logger.warn({ what: 'handleTakeRouteScreenshot threw up', args: JSON.stringify(job) }, error);
+        logger.warn('handleTakeRouteScreenshot threw up', error, { extras: { args: JSON.stringify(job) } } );
     }
 };
 
