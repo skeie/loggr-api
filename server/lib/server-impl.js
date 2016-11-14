@@ -6,7 +6,6 @@ const { middleware, server } = require('../../libs/express-base');
 
 const events = require('./events');
 const metrics = require('./metrics');
-const apiV1 = require('../api/apiV1');
 const apiV2 = require('../api/apiV2');
 
 
@@ -38,7 +37,6 @@ function startApp ({ config, eventBus }) {
         res.send({ message: 'Hello world' });
     });
 
-    app.use('/api/v1', apiV1(app));
     app.use('/api/v2', apiV2(app));
 
     metrics.startMonitoring({ eventBus, enable: config.METRICS_ENABLED });

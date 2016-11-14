@@ -72,7 +72,7 @@
     "start:worker": "./worker/run.sh",
     "start:server": "./server/run.sh",
     "start:server:debug": "sh ./server/run.sh -- --inspect --debug",
-    "start:server:watch": "nodemon -e js --exec 'sh' server/run.sh --watch 'server.js' --watch server/",
+    "dev": "nodemon -e js --exec 'sh' server/run.sh --watch 'server.js' --watch server/",
     "pretesttmp": "npm run lint",
     "test": "mocha --harmony-async-await",
     "test:watch": "mocha --watch",
