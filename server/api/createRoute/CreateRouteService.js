@@ -22,17 +22,13 @@ class CreateRouteService extends BaseService {
 
             // this function guarantees that no matter how
             // bad the data is, a valid sortorder sequence is generated
-            route.vertices = repairVerticeSortorder(route.vertices);
+            route.vertices = repairVerticeSortorder(route.vertices || []);
 
             try {
                 const routeId = await this.createRouteDAO.createRoute(route, tx);
                 await this.createRouteDAO.addBucketsToRoute(route.buckets || [], routeId, tx);
                 await this.createRouteDAO.addRouteAdmin(route.userId, routeId, tx);
                 await this.createRouteDAO.addVerticesToRoute(route.vertices || [], routeId, tx);
-
-                this.messageBus.publishNewRoute({ routeId });
-                this.messageBus.publishStoreDuration({ routeId });
-                this.messageBus.publishTakeRouteScreenshot({ routeId });
 
                 logger.info('Created route', routeId);
                 return routeId;
@@ -59,6 +55,14 @@ class CreateRouteService extends BaseService {
             // take screenshot
             // create card
             // flush redis cache
+        })
+
+        // trigger rabbit, after transaction.
+        .then(routeId => {
+            this.messageBus.publishNewRoute({ routeId });
+            this.messageBus.publishStoreDuration({ routeId });
+            this.messageBus.publishTakeRouteScreenshot({ routeId });
+            return routeId;
         });
     }
 

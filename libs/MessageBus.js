@@ -17,7 +17,7 @@ const NEW_ROUTE_SEND_EMAIL_QUEUE = 'create.NEW_ROUTE_SEND_EMAIL_QUEUE';
 const NEW_ROUTE_TAKE_SCREENSHOT_QUEUE = 'create.NEW_ROUTE_TAKE_SCREENSHOT_QUEUE';
 const NEW_ROUTE_STORE_DURATION_QUEUE = 'create.NEW_ROUTE_STORE_DURATION_QUEUE';
 
-function MessageBus(config) {
+function MessageBus (config) {
     EventEmitter.call(this);
 
     this.config = config;
@@ -72,7 +72,7 @@ MessageBus.prototype.subscribeToMessageBus = function () {
  */
 MessageBus.prototype.handleSendNewRouteEmail = function (job, ack) {
     try {
-        logger.info(`[EXEC JOB] New route ${job}`);
+        logger.info(`[EXEC JOB] New route ${job.routeId}`);
 
         this.notifyWorker.notify(Object.assign({ command: Notifications.NEW_ROUTE }, job))
             .then(() => {
@@ -93,7 +93,7 @@ MessageBus.prototype.handleSendNewRouteEmail = function (job, ack) {
  */
 MessageBus.prototype.handleStoreDuration = function (job, ack) {
     try {
-        logger.info(`[EXEC JOB] Store duration ${job}`);
+        logger.info(`[EXEC JOB] Store duration ${job.routeId}`);
 
         this.routeWorker.storeDuration(job)
             .then(() => {
@@ -114,7 +114,7 @@ MessageBus.prototype.handleStoreDuration = function (job, ack) {
  */
 MessageBus.prototype.handleTakeRouteScreenshot = function (job, ack) {
     try {
-        logger.info(`[EXEC JOB] handleTakeRouteScreenshot ${job}`);
+        logger.info(`[EXEC JOB] handleTakeRouteScreenshot ${job.routeId}`);
 
         this.routeWorker.takeShot(job.routeId)
             .then(() => {
