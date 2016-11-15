@@ -2,7 +2,7 @@ const Promise = require('bluebird');
 const bindAll = require('lodash.bindall');
 const get = require('lodash.get');
 const isNumber = require('lodash.isnumber');
-const BaseDAO = require('../apiHelpers/BaseDAO');
+const BaseDAO = require('../apihelpers/BaseDAO');
 const logger = require('../../../libs/fruits-logger');
 const { 
     CREATE,
@@ -16,7 +16,7 @@ const {
     CREATE_VERTICE,
     CREATE_VERTICE_PHOTO,
     APPEND_VERTICE_BUCKETS
-} = require('./createRouteSql');
+} = require('./createRoutesql');
 
 const DEFAULT = 'DEFAULT';
 

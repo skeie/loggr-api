@@ -21,11 +21,11 @@ docker stop routes-create-api && docker rm -f routes-create-api
 if [ $1 == "DRYRUN" ]; then
   echo "\n${GREEN}Dry run baby. Buidling image: dryrun ${NC}"
   docker build -t gcr.io/$PROJECT_ID/routes-create-api:dryrun .
-  docker run -d -p 8001:8001 --name routes-create-api gcr.io/$PROJECT_ID/routes-create-api:dryrun
+  docker run -d -p 8011:8011 --name routes-create-api gcr.io/$PROJECT_ID/routes-create-api:dryrun
 
   ## let image deploy
   sleep 5;
-  curl http://localhost:8011/health
+  curl http://localhost:8011/internal-backstage/health/liveness
   if [ $? -eq 0 ]
   then
     echo "\n${GREEN}Health check OK! You can run npm run deploy now. ${NC}"

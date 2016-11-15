@@ -1,5 +1,5 @@
 const CreateRouteDAO = require('./CreateRouteDAO');
-const BaseService = require('../apiHelpers/BaseService');
+const BaseService = require('../apihelpers/BaseService');
 const logger = require('../../../libs/fruits-logger');
 const bindAll = require('lodash.bindall');
 const repairVerticeSortorder = require('./repairVerticeSortorder');
