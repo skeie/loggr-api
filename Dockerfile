@@ -8,7 +8,7 @@ RUN mkdir -p /home/node/src
 WORKDIR /home/node/src
 
 # The shrinkwrap is optional
-COPY package.json .npmrc npm-shrinkwrap.json* ./
+COPY package.json ./
 
 # Make sure to be able to build native deps, and remove buildtools afterwards for slim image
 # https://github.com/mhart/alpine-node/issues/47
@@ -19,7 +19,7 @@ RUN apk add --no-cache --virtual build-dependencies make gcc g++ python git && \
 
 COPY . .
 
-EXPOSE 3000
+EXPOSE 8011
 
 RUN chown -R node:node .
 USER node

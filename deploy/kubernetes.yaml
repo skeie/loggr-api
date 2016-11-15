@@ -1,0 +1,63 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: routes-create-api-deployment
+  labels:
+        name: routes-create-api
+spec:
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        name: routes-create-api
+    spec:
+      containers:
+      - image: gcr.io/sandbox-routes/routes-create-api:v1.0.0
+        name: routes-create-api
+        env:
+            - name: NODE_ENV
+              value: "production"
+            - name: FRUITS_ENV
+              value: "production"
+            - name: SERVER
+              value: "true"
+        ports:
+        - name: http-server
+          containerPort: 8011
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /internal-backstage/health/liveness
+            port: 8011
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /internal-backstage/health/liveness
+            port: 8011
+            scheme: HTTP
+          initialDelaySeconds: 5
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+ name: routes-create-api
+ labels:
+   name: routes-create-api
+spec:
+ type: ClusterIP
+ ports:
+   - port: 8011
+     targetPort: 8011
+     protocol: TCP
+ selector:
+   name: routes-create-api

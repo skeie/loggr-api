@@ -78,6 +78,8 @@
     "test:watch": "mocha --watch",
     "test:coverage": "nyc mocha",
     "test:coverage:report": "nyc --reporter=html mocha",
-    "test:debug": "npm run test:watch -- --inspect --debug"
+    "test:debug": "npm run test:watch -- --inspect --debug",
+    "deploy:dryrun": "sh deploy/deploy.sh DRYRUN",
+    "deploy": "sh deploy/deploy.sh PROD"
   }
 }

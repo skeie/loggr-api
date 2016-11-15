@@ -15,4 +15,4 @@ export NODE_ENV=${NODE_ENV:=development}
 # Remove $0 from the arguments
 shift
 
-node "$@" --harmony-async-await $CWD/spark.js
+node "$@" --harmony-async-await $CWD/index.js
