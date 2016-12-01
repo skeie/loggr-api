@@ -4,10 +4,9 @@ const { str } = require('envalid');
 
 // TODO: dont do this logic here, configure
 // the way its supposed to with config-loader
-const pgUrl = process.env.POSTGRES_SERVICE_HOST ?
+const pgUrl = process.env.NODE_ENV === 'production' ?
 
-    // kubernetes URI
-    'postgres://routyfruity:superduperroutes1337bro@' + process.env.POSTGRES_SERVICE_HOST + ':' + process.env.POSTGRES_SERVICE_PORT_POSTGRES + '/fruits' :
+    'postgres://routyfruity:superduperroutes1337bro@104.199.86.6/fruits' :
 
     // docker-compose (local) URI
     process.env.DB_PORT_5432_TCP_ADDR ?
