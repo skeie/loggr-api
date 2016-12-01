@@ -54,6 +54,7 @@ if [ $1 == "PROD" ]; then
 
       # Updating image. Note that this is only for when deployment exists from before
       kubectl set image deployment/routes-create-api-deployment routes-create-api=gcr.io/$PROJECT_ID/routes-create-api:$version
+      kubectl set image deployment/routes-create-api-worker-deployment routes-create-api-worker=gcr.io/$PROJECT_ID/routes-create-api:$version
     else
       osascript -e 'display notification "Docker build and release failed" with title "routes-create-api [FAIL]"'
     fi
