@@ -17,6 +17,7 @@ const NEW_ROUTE_SEND_EMAIL_QUEUE = 'create.NEW_ROUTE_SEND_EMAIL_QUEUE';
 const NEW_ROUTE_TAKE_SCREENSHOT_QUEUE = 'create.NEW_ROUTE_TAKE_SCREENSHOT_QUEUE';
 const NEW_ROUTE_STORE_DURATION_QUEUE = 'create.NEW_ROUTE_STORE_DURATION_QUEUE';
 const NEW_ROUTE_INVALIDATE_REDIS = 'create.CLEAR_CACHE';
+const NEW_ROUTE_PUT_SPICES_ON = 'create.NEW_ROUTE_PUT_SPICES_ON';
 
 function MessageBus (config) {
     EventEmitter.call(this);
@@ -34,11 +35,12 @@ MessageBus.prototype = Object.create(EventEmitter.prototype);
 
 MessageBus.prototype.onConnected = function () {
     let queues = 0;
-    const QUEUE_COUNT = 4;
+    const QUEUE_COUNT = 5;
     this.connections.queue.create(NEW_ROUTE_SEND_EMAIL_QUEUE, { prefetch: 5 }, onCreate.bind(this));
     this.connections.queue.create(NEW_ROUTE_STORE_DURATION_QUEUE, { prefetch: 5 }, onCreate.bind(this));
     this.connections.queue.create(NEW_ROUTE_TAKE_SCREENSHOT_QUEUE, { prefetch: 5 }, onCreate.bind(this));
     this.connections.queue.create(NEW_ROUTE_INVALIDATE_REDIS, { prefetch: 5 }, onCreate.bind(this));
+    this.connections.queue.create(NEW_ROUTE_PUT_SPICES_ON, { prefetch: 5 }, onCreate.bind(this));
 
     function onCreate () {
         if (++queues === QUEUE_COUNT) { this.onReady(); }
@@ -60,6 +62,7 @@ MessageBus.prototype.subscribeToMessageBus = function () {
     this.connections.queue.handle(NEW_ROUTE_SEND_EMAIL_QUEUE, this.handleSendNewRouteEmail.bind(this));
     this.connections.queue.handle(NEW_ROUTE_STORE_DURATION_QUEUE, this.handleStoreDuration.bind(this));
     this.connections.queue.handle(NEW_ROUTE_TAKE_SCREENSHOT_QUEUE, this.handleTakeRouteScreenshot.bind(this));
+    this.connections.queue.handle(NEW_ROUTE_PUT_SPICES_ON, this.handlePutSpicesOnRoute.bind(this));
 
     return this;
 };
@@ -132,6 +135,27 @@ MessageBus.prototype.handleTakeRouteScreenshot = function (job, ack) {
     }
 };
 
+/**
+ * @param  {Object} job routeId
+ * @param  {Function} ack
+ */
+MessageBus.prototype.handlePutSpicesOnRoute = function (job, ack) {
+    try {
+        logger.info(`[EXEC JOB] handlePutSpicesOnRoute ${job.routeId}`);
+
+        this.routeWorker.putSpicesOnRoute(job.routeId)
+            .then(() => {
+                logger.debug('handlePutSpicesOnRoute() complete');
+                ack();
+            })
+            .catch((error) => {
+                logger.warn('handlePutSpicesOnRoute failed', error, { extras: { args: JSON.stringify(job) } } );
+            });
+    } catch (error) {
+        logger.warn('handlePutSpicesOnRoute threw up', error, { extras: { args: JSON.stringify(job) } } );
+    }
+};
+
 
 /**
  * PUBLISH API
@@ -163,11 +187,22 @@ MessageBus.prototype.publishTakeRouteScreenshot = function (msg) {
 };
 
 /**
+ * Handled by routes-api-graphql
  * @param  {object} msg {cityName: 'Boston'}
  */
 MessageBus.prototype.publishClearRedisCache = function (msg) {
     logger.info('Publish clear redis cache for new route', { extras: msg });
     this.connections.queue.publish(NEW_ROUTE_INVALIDATE_REDIS, msg);
+};
+
+/**
+ * @param  {object} msg {routeId}
+ */
+MessageBus.prototype.spiceVenuesInRoute = function (msg) {
+    if (!msg.routeId) { throw new Error('Route is must be included'); }
+
+    logger.info('Putting spices on route', { extras: msg });
+    this.connections.queue.publish(NEW_ROUTE_PUT_SPICES_ON, msg);
 };
 
 

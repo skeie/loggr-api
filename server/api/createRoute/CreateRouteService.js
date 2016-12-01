@@ -11,6 +11,11 @@ class CreateRouteService extends BaseService {
         this.createRouteDAO = new CreateRouteDAO({ app });
 
         bindAll(this, 'postRoute');
+
+        let that = this;
+        setTimeout(() => {
+            that.messageBus.spiceVenuesInRoute({ routeId: 3917 });
+        }, 100)
     }
 
     postRoute (route) {
@@ -43,10 +48,11 @@ class CreateRouteService extends BaseService {
 
         // trigger rabbit, after transaction.
         .then(routeId => {
+            this.messageBus.spiceVenuesInRoute({ routeId });
             this.messageBus.publishNewRoute({ routeId });
             this.messageBus.publishStoreDuration({ routeId });
             this.messageBus.publishTakeRouteScreenshot({ routeId });
-            this.messageBus.publishClearRedisCache({ cityName: route.city })
+            this.messageBus.publishClearRedisCache({ cityName: route.city });
             return routeId;
         });
     }
@@ -55,7 +61,6 @@ class CreateRouteService extends BaseService {
         if (route.city) { return route.city; }
 
         route.vertices.forEach(v => {
-            console.log('SSSUU', v);
             if (v.city) {
                 route.city = v.city;
             }
