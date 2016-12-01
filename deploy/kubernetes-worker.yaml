@@ -12,7 +12,7 @@ spec:
         name: routes-create-api-worker
     spec:
       containers:
-      - image: gcr.io/sandbox-routes/routes-create-api:v1.0.0
+      - image: gcr.io/sandbox-routes/routes-create-api:v1.0.2
         name: routes-create-api-worker
         env:
             - name: NODE_ENV

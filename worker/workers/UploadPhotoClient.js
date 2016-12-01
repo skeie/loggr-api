@@ -53,7 +53,7 @@ class UploadPhotoClient {
                     return resolve(res.body);
                 })
                 .catch((err) => {
-                    logger.error('Failed to createMapImage', err);
+                    logger.warn('Failed to createMapImage', err);
                     reject(err);
                 });
         });

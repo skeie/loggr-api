@@ -85,7 +85,7 @@ class CreateRouteDAO extends BaseDAO {
     createVertice (routeId, venueId, vert, tx) {
         return tx.one(CREATE_VERTICE,
             [routeId, venueId, vert.title, vert.description, get(vert, 'photos[0].url', null),
-            get(vert, 'photos[0].photoSource', null), vert.sortorder])
+            get(vert, 'photos[0].photoSource', null), vert.sortorder]);
     }
 
     /**
@@ -141,7 +141,7 @@ class CreateRouteDAO extends BaseDAO {
     }
 
     addBucketsToVertice (buckets = [], verticeId, tx) {
-        const mappedBuckets = buckets.map(b => b.toLowerCase());
+        const mappedBuckets = buckets.map(b => b.toLowerCase().replace(' ', ''));
 
         // upsert buckets
         return Promise.all(mappedBuckets.map(b => tx.none(UPSERT_BUCKET, b)))

@@ -58,6 +58,10 @@ MessageBus.prototype.subscribeToMessageBus = function () {
     this.connections.queue.handle(NEW_ROUTE_SEND_EMAIL_QUEUE, this.handleSendNewRouteEmail.bind(this));
     this.connections.queue.handle(NEW_ROUTE_STORE_DURATION_QUEUE, this.handleStoreDuration.bind(this));
     this.connections.queue.handle(NEW_ROUTE_TAKE_SCREENSHOT_QUEUE, this.handleTakeRouteScreenshot.bind(this));
+
+    setTimeout(() => {
+        this.connections.queue.publish('create.CLEAR_CACHE', msg); // TODO: CHECK THAT IT GETS PICKED UP. TEST HOW MANY WORKERS WE CAN RUN!!
+    }, 500);
     return this;
 };
 
