@@ -13,9 +13,6 @@ class CreateRouteService extends BaseService {
         bindAll(this, 'postRoute');
 
         let that = this;
-        setTimeout(() => {
-            that.messageBus.spiceVenuesInRoute({ routeId: 3917 });
-        }, 100)
     }
 
     postRoute (route) {
