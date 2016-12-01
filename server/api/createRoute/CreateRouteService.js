@@ -46,6 +46,7 @@ class CreateRouteService extends BaseService {
             this.messageBus.publishNewRoute({ routeId });
             this.messageBus.publishStoreDuration({ routeId });
             this.messageBus.publishTakeRouteScreenshot({ routeId });
+            this.messageBus.publishClearRedisCache({ cityName: route.city })
             return routeId;
         });
     }

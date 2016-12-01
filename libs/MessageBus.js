@@ -16,6 +16,7 @@ const connections = require('./connections');
 const NEW_ROUTE_SEND_EMAIL_QUEUE = 'create.NEW_ROUTE_SEND_EMAIL_QUEUE';
 const NEW_ROUTE_TAKE_SCREENSHOT_QUEUE = 'create.NEW_ROUTE_TAKE_SCREENSHOT_QUEUE';
 const NEW_ROUTE_STORE_DURATION_QUEUE = 'create.NEW_ROUTE_STORE_DURATION_QUEUE';
+const NEW_ROUTE_INVALIDATE_REDIS = 'create.CLEAR_CACHE';
 
 function MessageBus (config) {
     EventEmitter.call(this);
@@ -33,12 +34,13 @@ MessageBus.prototype = Object.create(EventEmitter.prototype);
 
 MessageBus.prototype.onConnected = function () {
     let queues = 0;
-    const QUEUE_COUNT = 3;
+    const QUEUE_COUNT = 4;
     this.connections.queue.create(NEW_ROUTE_SEND_EMAIL_QUEUE, { prefetch: 5 }, onCreate.bind(this));
     this.connections.queue.create(NEW_ROUTE_STORE_DURATION_QUEUE, { prefetch: 5 }, onCreate.bind(this));
     this.connections.queue.create(NEW_ROUTE_TAKE_SCREENSHOT_QUEUE, { prefetch: 5 }, onCreate.bind(this));
+    this.connections.queue.create(NEW_ROUTE_INVALIDATE_REDIS, { prefetch: 5 }, onCreate.bind(this));
 
-    function onCreate() {
+    function onCreate () {
         if (++queues === QUEUE_COUNT) { this.onReady(); }
     }
 };
@@ -58,10 +60,7 @@ MessageBus.prototype.subscribeToMessageBus = function () {
     this.connections.queue.handle(NEW_ROUTE_SEND_EMAIL_QUEUE, this.handleSendNewRouteEmail.bind(this));
     this.connections.queue.handle(NEW_ROUTE_STORE_DURATION_QUEUE, this.handleStoreDuration.bind(this));
     this.connections.queue.handle(NEW_ROUTE_TAKE_SCREENSHOT_QUEUE, this.handleTakeRouteScreenshot.bind(this));
-    
-    // setTimeout(() => {
-    //     this.connections.queue.publish('create.CLEAR_CACHE', msg); // TODO: CHECK THAT IT GETS PICKED UP. TEST HOW MANY WORKERS WE CAN RUN!!
-    // }, 500);
+
     return this;
 };
 
@@ -143,25 +142,33 @@ MessageBus.prototype.handleTakeRouteScreenshot = function (job, ack) {
  * @param  {Object} msg routeId
  */
 MessageBus.prototype.publishNewRoute = function (msg) {
-    logger.info('Publish new route', msg);
+    logger.info('Publish new route', { extras: msg });
     this.connections.queue.publish(NEW_ROUTE_SEND_EMAIL_QUEUE, msg);
-}
+};
 
 /**
  * @param  {Object} msg routeId
  */
 MessageBus.prototype.publishStoreDuration = function (msg) {
-    logger.info('Publish store duration', msg);
+    logger.info('Publish store duration', { extras: msg });
     this.connections.queue.publish(NEW_ROUTE_STORE_DURATION_QUEUE, msg);
-}
+};
 
 /**
  * @param  {Object} msg routeId
  */
 MessageBus.prototype.publishTakeRouteScreenshot = function (msg) {
-    logger.info('Publish take route screenshot', msg);
+    logger.info('Publish take route screenshot', { extras: msg });
     this.connections.queue.publish(NEW_ROUTE_TAKE_SCREENSHOT_QUEUE, msg);
-}
+};
+
+/**
+ * @param  {object} msg {cityName: 'Boston'}
+ */
+MessageBus.prototype.publishClearRedisCache = function (msg) {
+    logger.info('Publish clear redis cache for new route', { extras: msg });
+    this.connections.queue.publish(NEW_ROUTE_INVALIDATE_REDIS, msg);
+};
 
 
 module.exports = function createApp (config) {
