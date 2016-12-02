@@ -5,6 +5,9 @@ const bindAll = require('lodash.bindall');
 // TODO: swich with brakes
 const request = require('good-guy-http');
 
+const GET_VENUES_SQL = `select ven.google_id AS "googleId", ven.lat, ven.lng from venues ven, vertices vert
+    where vert.venue_id = ven.id and vert.route_id = $1 order by vert.sort_order`;
+
 
 class CalculateDistancesClient {
 
@@ -40,10 +43,7 @@ class CalculateDistancesClient {
     }
 
     _getVenuesPlaceIdsAndGEOForRoute (routeId) {
-        const SQL = `select ven.google_id AS "googleId", ven.lat, ven.lng from venues ven, vertices vert
-    where vert.venue_id = ven.id and vert.route_id = $1 order by vert.sort_order`;
-
-        return this.dbHandler.many(SQL, [routeId]);
+        return this.dbHandler.many(GET_VENUES_SQL, [routeId]);
     }
 
     _createAndValidateDistanceMatrix ({ routeId, venues }) {

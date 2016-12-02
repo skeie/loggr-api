@@ -8,7 +8,6 @@
   },
   "license": "Unlicense",
   "dependencies": {
-    "axios": "^0.15.2",
     "bluebird": "^3.4.6",
     "body-parser": "^1.15.2",
     "bowser-cache": "^1.1.0",
