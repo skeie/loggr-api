@@ -87,9 +87,11 @@ MessageBus.prototype.handleSendNewRouteEmail = function (job, ack) {
             })
             .catch((error) => {
                 logger.warn('handleSendNewRouteEmail failed', error, { extras: { args: JSON.stringify(job) } } );
+                ack(error);
             });
     } catch (error) {
         logger.warn('handleSendNewRouteEmail threw up', error, { extras: { args: JSON.stringify(job) } } );
+        ack(error);
     }
 };
 
@@ -108,9 +110,11 @@ MessageBus.prototype.handleStoreDuration = function (job, ack) {
             })
             .catch((error) => {
                 logger.warn('handleStoreDuration failed', error, { extras: { args: JSON.stringify(job) } } );
+                ack(error);
             });
     } catch (error) {
         logger.warn('handleStoreDuration threw up', { extras: { args: JSON.stringify(job) } } );
+        ack(error);
     }
 };
 
@@ -129,9 +133,11 @@ MessageBus.prototype.handleTakeRouteScreenshot = function (job, ack) {
             })
             .catch((error) => {
                 logger.warn('handleTakeRouteScreenshot failed', error, { extras: { args: JSON.stringify(job) } } );
+                ack(error);
             });
     } catch (error) {
         logger.warn('handleTakeRouteScreenshot threw up', error, { extras: { args: JSON.stringify(job) } } );
+        ack(error);
     }
 };
 
@@ -150,9 +156,11 @@ MessageBus.prototype.handlePutSpicesOnRoute = function (job, ack) {
             })
             .catch((error) => {
                 logger.warn('handlePutSpicesOnRoute failed', error, { extras: { args: JSON.stringify(job) } } );
+                ack(error);
             });
     } catch (error) {
         logger.warn('handlePutSpicesOnRoute threw up', error, { extras: { args: JSON.stringify(job) } } );
+        ack(error);
     }
 };
 
