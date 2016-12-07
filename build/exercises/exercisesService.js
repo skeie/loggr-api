@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var Service = function Service(dao) {
+var Service = function Service(dao, commonDao) {
   var _this = this;
 
   _classCallCheck(this, Service);
@@ -28,7 +28,7 @@ var Service = function Service(dao) {
   };
 
   this.update = function (id, object, table) {
-    return _this.dao.update(id, object, table);
+    return _this.commonDao.update(id, object, table);
   };
 
   this.delete = function (id, table) {
@@ -36,7 +36,9 @@ var Service = function Service(dao) {
   };
 
   var ExercisesDao = dao || require('./exercisesDao');
+  var CommonDao = commonDao || require('../common/dao');
   this.dao = new ExercisesDao();
+  this.commonDao = new CommonDao();
 };
 
 exports.default = Service;

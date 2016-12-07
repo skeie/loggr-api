@@ -7,7 +7,11 @@ class Dao {
   }
 
   getAll = () => {
-    return this.db.query(`select exercises.id, name, body, index, amount from exercises, elements where elements.exercise_id = exercises.id`)
+    return this.db.query(`
+      SELECT DISTINCT (elements.exercise_id), elements.id, name, body, index, amount
+      FROM exercises, elements
+      WHERE elements.exercise_id = exercises.id order by elements.id` // need to order by elements.id to have the right sequence in grid
+    )
       .then(data => {
         return exercisesMapper(data);
       })
@@ -36,6 +40,7 @@ class Dao {
           const {id} = data;
           this.postThreeElements(id)
             .then(() => {
+                debugger;
               this.getOne(id).then(newExercise => resolve(newExercise));
             });
         });

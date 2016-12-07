@@ -25,6 +25,7 @@ const updateElement = (req, res, next) => {
   }
 
   const table = 'elements';
+  
   service.update(req.params.id, req.body.element, table)
         .then(() => {
           res.sendStatus(201);
@@ -33,7 +34,7 @@ const updateElement = (req, res, next) => {
         });
 };
 
-router.put('/:exerciseId/:id', updateElement);
+router.put('/:id', updateElement);
 router.post('/:exerciseId/element', postElement);
 
 function validate(param, req) {

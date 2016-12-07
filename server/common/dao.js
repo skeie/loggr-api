@@ -6,8 +6,8 @@ class Dao {
   }
 
   update = (id, object, table) => {
+    
     let args = [];
-
     let keys = Object.keys(object);
 
     if (!keys.length) {
@@ -25,6 +25,8 @@ class Dao {
     args.push(id);
 
     query += `updated=now() WHERE id=$${count} returning id;`;
+    console.log('query: ', query, args);
+    
     return this.insert(query, args);
   }
 
@@ -37,7 +39,6 @@ class Dao {
                 .catch(error => {
                   console.log('error', error);
                   reject(error);
-                  return error;
                 });
     });
   }

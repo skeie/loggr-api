@@ -10,8 +10,6 @@ import methodOverride from 'method-override';
 import expressValidator from 'express-validator';
 import element from './elements/elementRouter';
 
-
-console.log(process.env.DATABASE_URL + " yolo 1337");
 const favIconPath = '/public/favicon.ico';
 const favPath = process.env.NODE_ENV === 'prod' ?
   (path.resolve('.') + '/server/' + favIconPath) : (__dirname + favIconPath);

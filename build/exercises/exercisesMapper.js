@@ -3,43 +3,35 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.exerciseMapper = exports.exercisesMapper = undefined;
 
-function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+var _lodash = require("lodash");
 
 var exercisesMapper = exports.exercisesMapper = function exercisesMapper(exercises) {
-
-  var newExercise = [];
-  exercises.forEach(function (exercise) {
-    var user_id = exercise.user_id;
-    var created = exercise.created;
-
-    var rest = _objectWithoutProperties(exercise, ["user_id", "created"]);
-
-    var current = newExercise[rest.id] || {};
-
-    current.sets = current.sets || [];
-    current.id = rest.id;
-    current.metaData = rest.body;
-
-    current.name = rest.name;
-    current.sets[rest.index] = rest.amount || 0;
-    newExercise[rest.id] = current;
+  var grouped = (0, _lodash.groupBy)(exercises, function (exercise) {
+    return exercise.exercise_id;
   });
-  return newExercise.filter(function (element) {
-    return element;
+  var array = Object.keys(grouped).map(function (key) {
+    return grouped[key];
+  });
+  return array.map(function (element) {
+    return {
+      id: element[0].id,
+      metaData: "",
+      name: element[0].name,
+      sets: element
+    };
   });
 };
 
 var exerciseMapper = exports.exerciseMapper = function exerciseMapper(exercise) {
-  var sets = [];
   var returnExercise = {};
-  exercise.forEach(function (element) {
+  exercise.map(function (element) {
     returnExercise.id = element.id;
     returnExercise.name = element.name;
     returnExercise.metaData = element.body;
-    sets[element.index] = element.amount;
   });
-  returnExercise.sets = sets;
+  returnExercise.sets = exercise;
   return returnExercise;
 };
 //# sourceMappingURL=exercisesMapper.js.map

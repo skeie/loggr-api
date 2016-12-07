@@ -6,7 +6,7 @@ var cn = {
   port: 5432,
   database: 'loggr'
 };
-var url = process.env.DATABASE_URL || 'localhost';
+var url = process.env.DATABASE_URL || cn;
 var db = pgp(url);
 
 function pingPostgres() {

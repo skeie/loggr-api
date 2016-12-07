@@ -1,8 +1,10 @@
 export default class Service {
 
-  constructor(dao) {
+  constructor(dao, commonDao) {
     const ExercisesDao = dao || require('./exercisesDao');
+    const CommonDao = commonDao || require('../common/dao');
     this.dao = new ExercisesDao();
+    this.commonDao = new CommonDao();
   }
 
   getOne = id => {
@@ -22,7 +24,7 @@ export default class Service {
   }
 
   update = (id, object, table) => {
-    return this.dao.update(id, object, table);
+    return this.commonDao.update(id, object, table);
   }
   delete = (id, table) => {
     return this.dao.delete(id, table);

@@ -10,7 +10,8 @@ var Dao = function Dao(db, dao) {
   _classCallCheck(this, Dao);
 
   this.getAll = function () {
-    return _this.db.query('select exercises.id, name, body, index, amount from exercises, elements where elements.exercise_id = exercises.id').then(function (data) {
+    return _this.db.query('\n      SELECT DISTINCT (elements.exercise_id), elements.id, name, body, index, amount\n      FROM exercises, elements\n      WHERE elements.exercise_id = exercises.id order by elements.id' // need to order by elements.id to have the right sequence in grid
+    ).then(function (data) {
       return (0, _exercisesMapper.exercisesMapper)(data);
     }).catch(function (error) {
       return error;
@@ -34,6 +35,7 @@ var Dao = function Dao(db, dao) {
         var id = data.id;
 
         _this.postThreeElements(id).then(function () {
+          debugger;
           _this.getOne(id).then(function (newExercise) {
             return resolve(newExercise);
           });

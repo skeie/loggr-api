@@ -46,7 +46,6 @@ var _elementRouter2 = _interopRequireDefault(_elementRouter);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-console.log(process.env.DATABASE_URL + " yolo 1337");
 var favIconPath = '/public/favicon.ico';
 var favPath = process.env.NODE_ENV === 'prod' ? _path2.default.resolve('.') + '/server/' + favIconPath : __dirname + favIconPath;
 var app = (0, _express2.default)();

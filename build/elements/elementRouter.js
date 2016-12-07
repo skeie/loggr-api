@@ -39,6 +39,7 @@ var updateElement = function updateElement(req, res, next) {
   }
 
   var table = 'elements';
+
   service.update(req.params.id, req.body.element, table).then(function () {
     res.sendStatus(201);
   }).catch(function () {
@@ -46,7 +47,7 @@ var updateElement = function updateElement(req, res, next) {
   });
 };
 
-router.put('/:exerciseId/:id', updateElement);
+router.put('/:id', updateElement);
 router.post('/:exerciseId/element', postElement);
 
 function validate(param, req) {

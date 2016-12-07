@@ -42,6 +42,7 @@ var updateExercise = function updateExercise(req, res, next) {
   if (!(0, _lodash.isEmpty)(errors)) {
     res.send(400, errors);
   }
+
   var table = 'exercises';
   service.update(req.params.id, req.body.exercise, table).then(function () {
     res.sendStatus(201);
@@ -63,13 +64,15 @@ var deleteExercise = function deleteExercise(req, res, next) {
 
 var getAll = function getAll(req, res, next) {
   service.getAll().then(function (data) {
+    debugger;
+
     res.json({ data: data });
   }).catch(function (error) {
     res.sendStatus(400);
   });
 };
 
-router.put('/:id', updateExercise);
+router.put('/:id/:index', updateExercise);
 router.delete('/:id', deleteExercise);
 router.get('/:id', findOne);
 router.get('/', getAll);

@@ -10,8 +10,8 @@ var Dao = function Dao(db) {
   _classCallCheck(this, Dao);
 
   this.update = function (id, object, table) {
-    var args = [];
 
+    var args = [];
     var keys = Object.keys(object);
 
     if (!keys.length) {
@@ -29,6 +29,8 @@ var Dao = function Dao(db) {
     args.push(id);
 
     query += 'updated=now() WHERE id=$' + count + ' returning id;';
+    console.log('query: ', query, args);
+
     return _this.insert(query, args);
   };
 
@@ -39,7 +41,6 @@ var Dao = function Dao(db) {
       }).catch(function (error) {
         console.log('error', error);
         reject(error);
-        return error;
       });
     });
   };
