@@ -16,6 +16,6 @@ module.exports = {
     }),
     PORT: num({
         desc: 'The port to expose the application on',
-        default: 3000,
+        default: 8011,
     }),
 };

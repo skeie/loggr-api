@@ -1,10 +1,10 @@
 {
   "name": "node-example-app",
-  "version": "1.0.0",
+  "version": "1.0.7",
   "description": "A node.js scaffolding app",
   "private": true,
   "engines": {
-    "node": "6"
+    "node": "7"
   },
   "license": "Unlicense",
   "dependencies": {
@@ -21,11 +21,16 @@
     "envalid": "^2.3.0",
     "express": "^4.14.0",
     "express-mung": "^0.4.6",
+    "express-validator": "^2.21.0",
+    "good-guy-http": "^1.7.3",
     "helmet": "^3.1.0",
     "is-plain-object": "^2.0.1",
     "jackrabbit": "^2.3.0",
+    "jsonwebtoken": "^7.1.9",
     "lodash.bindall": "^4.4.0",
+    "lodash.get": "^4.4.2",
     "lodash.isfunction": "^3.0.8",
+    "lodash.isnumber": "^3.0.3",
     "node-uuid": "^1.4.7",
     "object.entries": "^1.0.3",
     "pg-monitor": "^0.5.11",
@@ -36,6 +41,7 @@
     "read-pkg": "^2.0.0",
     "read-pkg-up": "^2.0.0",
     "require-dir": "^0.3.1",
+    "sendgrid": "^2.0.0",
     "url-join": "^1.1.0",
     "verror": "^1.8.1",
     "yargs": "^6.3.0"
@@ -46,6 +52,7 @@
     "eslint-config-finn": "^1.0.0-beta.1",
     "espower-loader": "^1.0.1",
     "hashmark": "^4.1.0",
+    "lodash.uniq": "^4.5.0",
     "mocha": "^3.1.2",
     "nock": "^9.0.2",
     "nodemon": "^1.11.0",
@@ -63,13 +70,15 @@
     "start": "npm run start:server",
     "start:worker": "./worker/run.sh",
     "start:server": "./server/run.sh",
-    "start:server:debug": "sh ./server/run.sh -- --inspect --debug-brk",
-    "start:server:watch": "nodemon -e js --exec 'sh' server/run.sh --watch 'server.js' --watch server/",
-    "pretest": "npm run lint",
-    "test": "mocha",
+    "start:server:debug": "sh ./server/run.sh -- --inspect --debug",
+    "dev": "nodemon -e js --exec 'sh' server/run.sh --watch 'server.js' --watch server/",
+    "pretesttmp": "npm run lint",
+    "test": "mocha --harmony-async-await",
     "test:watch": "mocha --watch",
     "test:coverage": "nyc mocha",
     "test:coverage:report": "nyc --reporter=html mocha",
-    "test:debug": "npm run test:watch -- --inspect --debug-brk"
+    "test:debug": "npm run test:watch -- --inspect --debug",
+    "deploy:dryrun": "sh deploy/deploy.sh DRYRUN",
+    "deploy": "sh deploy/deploy.sh PROD"
   }
 }

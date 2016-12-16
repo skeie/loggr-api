@@ -26,10 +26,10 @@ function Connector(config) {
             ready();
         })
         .on('error', (err) => {
-            logger.error({ message: err, service: 'rabbitmq' });
+            logger.error('RabbitMQ error', err);
         })
-        .on('disconnected', () => {
-            logger.error({ message: 'disconnected', service: 'rabbitmq' });
+        .on('disconnected', (err) => {
+            logger.error('Failed to connect to rabbit', err);
             lost();
         });
 

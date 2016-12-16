@@ -22,7 +22,7 @@ function start() {
     }
 
     function shutdown() {
-        logger.log({ type: 'info', msg: 'shutting down' });
+        logger.info({ type: 'info', msg: 'shutting down' });
         process.exit();
     }
 }
