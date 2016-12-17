@@ -43,7 +43,7 @@ const deleteExercise = (req, res, next) => {
   const table = 'exercises';
   service.delete(req.params.id, table)
         .then(() => {
-          res.sendStatus(200);
+          res.sendStatus(201);
         }).catch(error => {
           console.log('error', error);
           

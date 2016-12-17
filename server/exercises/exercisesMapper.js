@@ -4,9 +4,11 @@ import { groupBy } from 'lodash';
 export const exercisesMapper = exercises => {
   const grouped = groupBy(exercises, (exercise) => exercise.exercise_id);
   const array = Object.keys(grouped).map(key => grouped[key]);
+
+
   return array.map(element => {
     return {
-      id: element[0].id,
+      id: element[0].exercise_id,
       metaData: "",
       name: element[0].name,
       sets: element
