@@ -32,8 +32,8 @@ const updateExercise = (req, res, next) => {
   
   const table = 'exercises';
   service.update(req.params.id, req.body.exercise, table)
-        .then(() => {
-          res.sendStatus(201);
+        .then((data) => {
+          res.json(data);
         }).catch(() => {
           res.sendStatus(400);
         });
@@ -54,19 +54,18 @@ const deleteExercise = (req, res, next) => {
 const getAll = (req, res, next) => {
   service.getAll()
         .then(data => {
-          debugger;
-
           res.json({data});
         }).catch(error => {
           res.sendStatus(400);
         });
 };
 
-router.put('/:id/:index', updateExercise);
+// router.put('/:id/:index', updateExercise);
 router.delete('/:id', deleteExercise);
 router.get('/:id', findOne);
 router.get('/', getAll);
 router.post('/:userId', postOne);
+router.put('/:id', updateExercise);
 
 function validate(param, req) {
   const errors = req.validationErrors();

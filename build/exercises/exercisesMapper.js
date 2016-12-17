@@ -14,9 +14,10 @@ var exercisesMapper = exports.exercisesMapper = function exercisesMapper(exercis
   var array = Object.keys(grouped).map(function (key) {
     return grouped[key];
   });
+
   return array.map(function (element) {
     return {
-      id: element[0].id,
+      id: element[0].exercise_id,
       metaData: "",
       name: element[0].name,
       sets: element
@@ -25,13 +26,15 @@ var exercisesMapper = exports.exercisesMapper = function exercisesMapper(exercis
 };
 
 var exerciseMapper = exports.exerciseMapper = function exerciseMapper(exercise) {
-  var returnExercise = {};
-  exercise.map(function (element) {
-    returnExercise.id = element.id;
-    returnExercise.name = element.name;
-    returnExercise.metaData = element.body;
+
+  var returnExercise = {
+    id: exercise[0].id,
+    name: exercise[0].name,
+    metaData: exercise[0].body
+  };
+  returnExercise.sets = exercise.sort(function (a, b) {
+    return a.index > b.index;
   });
-  returnExercise.sets = exercise;
   return returnExercise;
 };
 //# sourceMappingURL=exercisesMapper.js.map

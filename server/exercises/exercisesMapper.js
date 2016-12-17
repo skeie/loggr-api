@@ -17,13 +17,16 @@ export const exercisesMapper = exercises => {
 }
 
 export const exerciseMapper = exercise => {
-  const returnExercise = {};
-  exercise.map(element => {
-    returnExercise.id = element.id;
-    returnExercise.name = element.name;
-    returnExercise.metaData = element.body;
-  });
-  returnExercise.sets = exercise;
+
+  const returnExercise =
+    {
+      id: exercise[0].id,
+      name: exercise[0].name,
+      metaData: exercise[0].body
+    };
+  returnExercise.sets = exercise.sort((a, b) => a.index > b.index);
   return returnExercise;
 };
+
+
 

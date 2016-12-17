@@ -44,8 +44,8 @@ var updateExercise = function updateExercise(req, res, next) {
   }
 
   var table = 'exercises';
-  service.update(req.params.id, req.body.exercise, table).then(function () {
-    res.sendStatus(201);
+  service.update(req.params.id, req.body.exercise, table).then(function (data) {
+    res.json(data);
   }).catch(function () {
     res.sendStatus(400);
   });
@@ -54,7 +54,7 @@ var updateExercise = function updateExercise(req, res, next) {
 var deleteExercise = function deleteExercise(req, res, next) {
   var table = 'exercises';
   service.delete(req.params.id, table).then(function () {
-    res.sendStatus(200);
+    res.sendStatus(201);
   }).catch(function (error) {
     console.log('error', error);
 
@@ -64,19 +64,18 @@ var deleteExercise = function deleteExercise(req, res, next) {
 
 var getAll = function getAll(req, res, next) {
   service.getAll().then(function (data) {
-    debugger;
-
     res.json({ data: data });
   }).catch(function (error) {
     res.sendStatus(400);
   });
 };
 
-router.put('/:id/:index', updateExercise);
+// router.put('/:id/:index', updateExercise);
 router.delete('/:id', deleteExercise);
 router.get('/:id', findOne);
 router.get('/', getAll);
 router.post('/:userId', postOne);
+router.put('/:id', updateExercise);
 
 function validate(param, req) {
   var errors = req.validationErrors();

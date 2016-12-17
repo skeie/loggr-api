@@ -28,7 +28,10 @@ var Service = function Service(dao, commonDao) {
   };
 
   this.update = function (id, object, table) {
-    return _this.commonDao.update(id, object, table);
+    return _this.commonDao.update(id, object, table).then(function (_ref) {
+      var id = _ref.id;
+      return _this.getOne(id);
+    });
   };
 
   this.delete = function (id, table) {

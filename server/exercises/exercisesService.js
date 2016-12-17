@@ -24,7 +24,8 @@ export default class Service {
   }
 
   update = (id, object, table) => {
-    return this.commonDao.update(id, object, table);
+    return this.commonDao.update(id, object, table)
+    .then(({ id }) => this.getOne(id));
   }
   delete = (id, table) => {
     return this.dao.delete(id, table);
