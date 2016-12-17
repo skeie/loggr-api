@@ -17,6 +17,7 @@ export const exercisesMapper = exercises => {
 };
 
 export const exerciseMapper = exercise => {
+
   const returnExercise =
     {
       id: exercise[0].exerciseId,
