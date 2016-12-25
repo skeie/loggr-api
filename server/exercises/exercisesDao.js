@@ -39,7 +39,6 @@ class Dao {
           const {id} = data;
           this.postThreeElements(id)
             .then(() => {
-                debugger;
               this.getOne(id).then(newExercise => resolve(newExercise));
             });
         });
