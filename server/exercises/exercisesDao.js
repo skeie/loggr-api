@@ -8,20 +8,19 @@ class Dao {
 
   getAll = () => {
     return this.db.query(`
-      SELECT DISTINCT (elements.exercise_id), elements.id, name, body, index, amount
+      SELECT DISTINCT (elements.exercise_id), elements.id, name, body, index, amount, exercises.updated
       FROM exercises, elements
-      WHERE elements.exercise_id = exercises.id order by elements.id` // need to order by elements.id to have the right sequence in grid
+      WHERE elements.exercise_id = exercises.id order by elements.id`
+       // need to order by elements.id to have the right sequence in grid
     )
-      .then(data => {
-        return exercisesMapper(data);
-      })
+      .then(data => exercisesMapper(data))
       .catch(error => {
         return error;
       });
   }
 
   getOne = id => {
-    return this.db.query(`select exercises.id, name, body, index, amount from exercises, elements where exercises.id = ${id} AND elements.exercise_id = exercises.id`)
+    return this.db.query(`select exercises.id as "exerciseId", elements.id, name, body, index, amount from exercises, elements where exercises.id = ${id} AND elements.exercise_id = exercises.id order by index`)
       .then(data => {
         return exerciseMapper(data);
       })
