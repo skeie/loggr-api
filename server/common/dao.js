@@ -1,4 +1,4 @@
-import {snakeCase} from 'lodash';
+const snakeCase = require('lodash/snakeCase');
 
 class Dao {
   constructor(db) {

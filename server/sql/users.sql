@@ -7,3 +7,6 @@ create table IF NOT EXISTS users (
 
 
 insert into users (name) values ('DaddyMcSwagga');
+
+insert into users (name) values ('Bendik');
+

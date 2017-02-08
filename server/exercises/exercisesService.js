@@ -11,8 +11,8 @@ export default class Service {
     return this.dao.getOne(id);
   }
 
-  getAll = () => {
-    return this.dao.getAll();
+  getAll = (userId) => {
+    return this.dao.getAll(userId);
   }
 
   postOne = (exercise, userId) => {
