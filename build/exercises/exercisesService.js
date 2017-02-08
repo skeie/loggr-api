@@ -15,8 +15,8 @@ var Service = function Service(dao, commonDao) {
     return _this.dao.getOne(id);
   };
 
-  this.getAll = function () {
-    return _this.dao.getAll();
+  this.getAll = function (userId) {
+    return _this.dao.getAll(userId);
   };
 
   this.postOne = function (exercise, userId) {

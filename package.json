@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "postinstall": "npm run build",
+   
     "dev": "NODE_ENV=prod nodemon ./server/app --exec babel-node",
     "debug": "NODE_ENV=prod nodemon --inspect ./server/app --exec babel-node",
     "clean": "rm -rf build && mkdir build",
