@@ -5,8 +5,11 @@ create table IF NOT EXISTS users (
     updated timestamptz not null default now()
 );
 
+ALTER TABLE users ADD COLUMN image varchar(1000) default '';
+ALTER TABLE users ADD COLUMN email varchar(100) default '';
 
-insert into users (name) values ('DaddyMcSwagga');
+ALTER TABLE users ADD COLUMN image varchar(1000) default '';
 
-insert into users (name) values ('Bendik');
+ALTER TABLE users DROP COLUMN image;
+
 

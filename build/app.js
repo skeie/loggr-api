@@ -44,6 +44,10 @@ var _elementRouter = require('./elements/elementRouter');
 
 var _elementRouter2 = _interopRequireDefault(_elementRouter);
 
+var _userRouter = require('./users/userRouter');
+
+var _userRouter2 = _interopRequireDefault(_userRouter);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var favIconPath = '/public/favicon.ico';
@@ -65,40 +69,40 @@ app.use(_express2.default.static(_path2.default.join(__dirname, 'public')));
 
 app.use('/exercises', _exercisesRouter2.default);
 app.use('/elements', _elementRouter2.default);
-
+app.use('/users', _userRouter2.default);
 app.get('*', function (req, res, next) {
   res.json({ hello: 'world' });
 });
 // catch 404 and forward to error handler
-app.use(function (req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+// app.use((req, res, next) => {
+//   var err = new Error('Not Found');
+//   err.status = 404;
+//   next(err);
+// });
 
 // error handlers
 
 // development error handler
 // will print stacktrace
-if (app.get('env') === 'development') {
-  app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.json('error', {
-      message: err.message,
-      error: err
-    });
-  });
-}
+// if (app.get('env') === 'development') {
+//   app.use((err, req, res, next) => {
+//     res.status(err.status || 500);
+//     res.json('error', {
+//       message: err.message,
+//       error: err
+//     });
+//   });
+// }
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function (err, req, res, next) {
-  res.status(err.status || 500);
-  res.json('error', {
-    message: err.message,
-    error: {}
-  });
-});
+// app.use((err, req, res, next) => {
+//   res.status(err.status || 500);
+//   res.json('error', {
+//     message: err.message,
+//     error: {}
+//   });
+// });
 
 app.listen(app.get('port'), function () {
   console.log('Node app is running on port', app.get('port'));

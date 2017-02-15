@@ -2,8 +2,9 @@ import express from "express";
 const router = express.Router();
 import Service from "./exercisesService";
 import { isEmpty } from "lodash";
+import { requireAuth } from '../util/jwtToken';
 const service = new Service();
-
+const requireToken = requireAuth();
 const findOne = (req, res, next) => {
   service.getOne(req.params.id).then(data => {
     res.json({ data });
@@ -72,11 +73,11 @@ const getAll = (req, res, next) => {
 };
 
 // router.put('/:id/:index', updateExercise);
-router.delete("/:id", deleteExercise);
-router.get("/:userId", getAll);
+router.delete("/:id", requireToken, deleteExercise);
+router.get("/:userId", requireToken, getAll);
 // router.get("/one/:id", findOne);
-router.post("/:userId", postOne);
-router.put("/:id", updateExercise);
+router.post("/:userId", requireToken, postOne);
+router.put("/:id", requireToken, updateExercise);
 
 const validate = (param, req) => {
   const errors = req.validationErrors();

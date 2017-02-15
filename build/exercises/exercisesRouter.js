@@ -12,12 +12,14 @@ var _exercisesService2 = _interopRequireDefault(_exercisesService);
 
 var _lodash = require("lodash");
 
+var _jwtToken = require("../util/jwtToken");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = _express2.default.Router();
 
 var service = new _exercisesService2.default();
-
+var requireToken = (0, _jwtToken.requireAuth)();
 var findOne = function findOne(req, res, next) {
   service.getOne(req.params.id).then(function (data) {
     res.json({ data: data });
@@ -75,11 +77,11 @@ var getAll = function getAll(req, res, next) {
 };
 
 // router.put('/:id/:index', updateExercise);
-router.delete("/:id", deleteExercise);
-router.get("/:userId", getAll);
+router.delete("/:id", requireToken, deleteExercise);
+router.get("/:userId", requireToken, getAll);
 // router.get("/one/:id", findOne);
-router.post("/:userId", postOne);
-router.put("/:id", updateExercise);
+router.post("/:userId", requireToken, postOne);
+router.put("/:id", requireToken, updateExercise);
 
 var validate = function validate(param, req) {
   var errors = req.validationErrors();
