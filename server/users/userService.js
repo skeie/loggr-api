@@ -10,8 +10,12 @@ export default class Service {
     this.commonDao = new CommonDao();
   }
 
+  getUserById = userId => {
+    return this.dao.getUserById(userId);
+  }
+
   createUser = user => {
-    return this.dao.getUser(user.email).then(ourUser => {
+    return this.dao.getUserWithEmail(user.email).then(ourUser => {
       if (Boolean(ourUser)) {
         this.highscoreService.create(ourUser.id, true); //legazy, remove me
         return { ...ourUser, jwtToken: jwtToken.generateToken(ourUser) };

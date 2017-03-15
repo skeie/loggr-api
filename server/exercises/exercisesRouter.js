@@ -59,8 +59,6 @@ const deleteExercise = (req, res, next) => {
 };
 
 const getAll = (req, res, next) => {
-  console.log('kommer du hit?');
-  
   const { userId } = req.params;
   service
     .getAll(userId)
@@ -68,6 +66,7 @@ const getAll = (req, res, next) => {
       res.json({ data });
     })
     .catch(error => {
+      console.log('error in getting all', error);
       res.sendStatus(400);
     });
 };

@@ -65,13 +65,12 @@ var deleteExercise = function deleteExercise(req, res, next) {
 };
 
 var getAll = function getAll(req, res, next) {
-  console.log('kommer du hit?');
-
   var userId = req.params.userId;
 
   service.getAll(userId).then(function (data) {
     res.json({ data: data });
   }).catch(function (error) {
+    console.log('error in getting all', error);
     res.sendStatus(400);
   });
 };

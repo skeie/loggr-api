@@ -3,8 +3,10 @@ export default class Service {
   constructor(dao, commonDao) {
     const ExercisesDao = dao || require('./exercisesDao');
     const CommonDao = commonDao || require('../common/dao');
+    const WorkoutDao = require('../workouts/workoutDao');
     this.dao = new ExercisesDao();
     this.commonDao = new CommonDao();
+    this.workoutDao = new WorkoutDao();
   }
 
   getOne = id => {
@@ -12,7 +14,9 @@ export default class Service {
   }
 
   getAll = (userId) => {
-    return this.dao.getAll(userId);
+    return this.workoutDao.getCurrentWorkout(userId)
+    .then(currentWorkout => this.dao.getAll(userId, currentWorkout))
+    
   }
 
   postOne = (exercise, userId) => {

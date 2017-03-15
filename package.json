@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "dev": "NODE_ENV=prod nodemon ./server/app --exec babel-node --harmony-async-await",
-    "debug": "NODE_ENV=prod nodemon --inspect ./server/app --exec babel-node",
+    "dev": "nodemon ./server/app --exec babel-node --harmony-async-await",
+    "debug": "nodemon --inspect ./server/app --exec babel-node",
     "clean": "rm -rf build && mkdir build",
     "build-server": "./node_modules/.bin/babel -d ./build ./server -s",
     "build": "npm run clean && npm run build-server",
