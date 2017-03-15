@@ -7,11 +7,18 @@ var Dao = function Dao(db, dao) {
 
   _classCallCheck(this, Dao);
 
-  this.getUser = function (email) {
+  this.getUserWithEmail = function (email) {
     return _this.db.any("select id, name, image, email from users where email=$1", [email]).then(function (data) {
       return data[0]; //assume there is only one
     }).catch(function (error) {
+      console.log("no user found", error);
       return false;
+    });
+  };
+
+  this.getUserById = function (userId) {
+    return _this.db.one("select usr.id, name, image, email, s.highscore from users usr left join highscore s on (s.user_id = $1) where usr.id = $1", [userId]).catch(function (err) {
+      return console.log("err", err);
     });
   };
 

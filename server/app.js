@@ -10,6 +10,8 @@ import methodOverride from 'method-override';
 import expressValidator from 'express-validator';
 import element from './elements/elementRouter';
 import users from './users/userRouter';
+import highscore from './highscore/highscoreRouter';
+import workout from './workouts/workoutRouter';
 const favIconPath = '/public/favicon.ico';
 const favPath = process.env.NODE_ENV === 'prod' ?
   (path.resolve('.') + '/server/' + favIconPath) : (__dirname + favIconPath);
@@ -31,6 +33,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/exercises', exercises);
 app.use('/elements', element);
 app.use('/users', users);
+app.use('/highscore', highscore);
+app.use('/workout', workout);
 app.get('*', (req, res, next) => {
   res.json({ hello: 'world' });
 });

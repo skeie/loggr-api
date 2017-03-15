@@ -15,8 +15,12 @@ var Service = function Service(dao, commonDao) {
 
   _classCallCheck(this, Service);
 
+  this.getUserById = function (userId) {
+    return _this.dao.getUserById(userId);
+  };
+
   this.createUser = function (user) {
-    return _this.dao.getUser(user.email).then(function (ourUser) {
+    return _this.dao.getUserWithEmail(user.email).then(function (ourUser) {
       if (Boolean(ourUser)) {
         _this.highscoreService.create(ourUser.id, true); //legazy, remove me
         return _extends({}, ourUser, { jwtToken: jwtToken.generateToken(ourUser) });

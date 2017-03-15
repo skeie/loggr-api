@@ -6,43 +6,41 @@ var _express = require("express");
 
 var _express2 = _interopRequireDefault(_express);
 
-var _userService = require("./userService");
+var _highscoreService = require("./highscoreService");
 
-var _userService2 = _interopRequireDefault(_userService);
+var _highscoreService2 = _interopRequireDefault(_highscoreService);
 
 var _jwtToken = require("../util/jwtToken");
+
+var _isEmpty = require("lodash/isEmpty");
+
+var _isEmpty2 = _interopRequireDefault(_isEmpty);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = _express2.default.Router();
 
+var service = new _highscoreService2.default();
+
 var requireToken = (0, _jwtToken.requireAuth)();
-var service = new _userService2.default();
 
-var createUser = function createUser(req, res, next) {
-  service.createUser(req.body).then(function (user) {
-    res.json(user);
-  }).catch(function (error) {
-    console.log("error", error);
 
+var getAll = function getAll(req, res, next) {
+  var errors = validate("user", req);
+  if (!(0, _isEmpty2.default)(errors)) {
+    res.send(400, errors);
+  }
+
+  service.getAll(req.user.id).then(function (data) {
+    res.json(data);
+  }).catch(function () {
     res.sendStatus(400);
   });
 };
 
-var getUserById = function getUserById(req, res, next) {
-  service.getUserById(req.user.id).then(function (user) {
-    res.json(user);
-  }).catch(function (error) {
-    console.log("error", error);
+router.get("/", requireToken, getAll);
 
-    res.sendStatus(400);
-  });
-};
-
-router.post("/", createUser);
-router.get("/", requireToken, getUserById);
-
-var validate = function validate(param, req) {
+function validate(param, req) {
   var errors = req.validationErrors();
 
   if (errors) {
@@ -51,7 +49,7 @@ var validate = function validate(param, req) {
   } else {
     return {};
   }
-};
+}
 
 module.exports = router;
-//# sourceMappingURL=userRouter.js.map
+//# sourceMappingURL=highscoreRouter.js.map

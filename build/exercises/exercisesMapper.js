@@ -5,10 +5,16 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.exerciseMapper = exports.exercisesMapper = undefined;
 
-var _lodash = require("lodash");
+var _groupBy = require("lodash/groupBy");
+
+var _groupBy2 = _interopRequireDefault(_groupBy);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var exercisesMapper = exports.exercisesMapper = function exercisesMapper(exercises) {
-  var grouped = (0, _lodash.groupBy)(exercises, function (exercise) {
+  var workoutExercises = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [];
+
+  var grouped = (0, _groupBy2.default)(exercises, function (exercise) {
     return exercise.exercise_id;
   });
   var array = Object.keys(grouped).map(function (key) {
@@ -23,13 +29,15 @@ var exercisesMapper = exports.exercisesMapper = function exercisesMapper(exercis
       id: element[0].exercise_id,
       metaData: "",
       name: element[0].name,
-      sets: element
+      sets: element,
+      isInWorkout: workoutExercises.some(function (workoutExercise) {
+        return workoutExercise.id === element[0].exercise_id;
+      })
     };
   });
 };
 
 var exerciseMapper = exports.exerciseMapper = function exerciseMapper(exercise) {
-
   var returnExercise = {
     id: exercise[0].exerciseId,
     name: exercise[0].name,

@@ -16,7 +16,9 @@ var Service = function Service(dao, commonDao) {
   };
 
   this.getAll = function (userId) {
-    return _this.dao.getAll(userId);
+    return _this.workoutDao.getCurrentWorkout(userId).then(function (currentWorkout) {
+      return _this.dao.getAll(userId, currentWorkout);
+    });
   };
 
   this.postOne = function (exercise, userId) {
@@ -40,8 +42,10 @@ var Service = function Service(dao, commonDao) {
 
   var ExercisesDao = dao || require('./exercisesDao');
   var CommonDao = commonDao || require('../common/dao');
+  var WorkoutDao = require('../workouts/workoutDao');
   this.dao = new ExercisesDao();
   this.commonDao = new CommonDao();
+  this.workoutDao = new WorkoutDao();
 };
 
 exports.default = Service;

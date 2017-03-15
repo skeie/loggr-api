@@ -48,6 +48,14 @@ var _userRouter = require('./users/userRouter');
 
 var _userRouter2 = _interopRequireDefault(_userRouter);
 
+var _highscoreRouter = require('./highscore/highscoreRouter');
+
+var _highscoreRouter2 = _interopRequireDefault(_highscoreRouter);
+
+var _workoutRouter = require('./workouts/workoutRouter');
+
+var _workoutRouter2 = _interopRequireDefault(_workoutRouter);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var favIconPath = '/public/favicon.ico';
@@ -70,6 +78,8 @@ app.use(_express2.default.static(_path2.default.join(__dirname, 'public')));
 app.use('/exercises', _exercisesRouter2.default);
 app.use('/elements', _elementRouter2.default);
 app.use('/users', _userRouter2.default);
+app.use('/highscore', _highscoreRouter2.default);
+app.use('/workout', _workoutRouter2.default);
 app.get('*', function (req, res, next) {
   res.json({ hello: 'world' });
 });
