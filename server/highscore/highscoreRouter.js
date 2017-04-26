@@ -15,8 +15,6 @@ const getAll = (req, res, next) => {
     service
         .getAll(req.user.id)
         .then(data => {
-            console.log('data', data);
-
             res.json(data);
         })
         .catch(() => {

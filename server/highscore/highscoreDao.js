@@ -40,11 +40,6 @@ class Dao {
         SELECT position FROM summary s
         WHERE s.user_id = ${userId}`,
             )
-            .then(data => {
-                console.log('data', data);
-                
-                return data;
-            })
             .catch(error => {
                 return error;
             });
