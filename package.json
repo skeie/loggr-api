@@ -6,8 +6,8 @@
     "dev": "nodemon ./server/app --exec babel-node",
     "debug": "nodemon --inspect ./server/app --exec babel-node",
     "clean": "rm -rf build && mkdir build",
-    "build-server": "./node_modules/.bin/babel -d ./build ./server -s",
-    "build": "npm run clean && npm run build-server",
+    "build-server": "babel -d ./build ./server -s",
+    "build": "npm run clean && npm install && npm run build-server",
     "start": "NODE_ENV=prod node ./build/app.js"
   },
   "dependencies": {
