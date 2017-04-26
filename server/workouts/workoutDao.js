@@ -6,7 +6,6 @@ class Dao {
   }
 
   createWorkout = (exerciseId, userId) => {
-    console.log('sapdap1', typeof exerciseId, typeof userId)
     return this.db.one(
       `INSERT INTO workouts (exercises, users) VALUES (ARRAY[ $1 ], ARRAY [ $2 ]) returning id`,
       [exerciseId, userId]
@@ -14,7 +13,6 @@ class Dao {
   };
 
   updateCurrentWorkout = (exerciseId, userId) => {
-    console.log('sapdap', exerciseId, userId)
     return this.db
       .one(
         `update workouts set exercises = array_append(exercises, $1) where is_active = true and $2 = ANY(users) returning id`,

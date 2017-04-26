@@ -1,38 +1,40 @@
-import express from "express";
+import express from 'express';
 const router = express.Router();
-import Service from "./highscoreService";
+import Service from './highscoreService';
 const service = new Service();
-import { requireAuth } from "../util/jwtToken";
+import { requireAuth } from '../util/jwtToken';
 const requireToken = requireAuth();
 import isEmpty from 'lodash/isEmpty';
 
 const getAll = (req, res, next) => {
-  const errors = validate("user", req);
-  if (!isEmpty(errors)) {
-    res.send(400, errors);
-  }
-  
-  service
-    .getAll(req.user.id)
-    .then(data => {
-      res.json(data);
-    })
-    .catch(() => {
-      res.sendStatus(400);
-    });
+    const errors = validate('user', req);
+    if (!isEmpty(errors)) {
+        res.send(400, errors);
+    }
+
+    service
+        .getAll(req.user.id)
+        .then(data => {
+          console.log('data', data);
+          
+            res.json(data);
+        })
+        .catch(() => {
+            res.sendStatus(400);
+        });
 };
 
-router.get("/", requireToken, getAll);
+router.get('/', requireToken, getAll);
 
 function validate(param, req) {
-  const errors = req.validationErrors();
+    const errors = req.validationErrors();
 
-  if (errors) {
-    console.log({ what: param, error: JSON.stringify(errors) });
-    return { ...errors };
-  } else {
-    return {};
-  }
+    if (errors) {
+        console.log({ what: param, error: JSON.stringify(errors) });
+        return { ...errors };
+    } else {
+        return {};
+    }
 }
 
 module.exports = router;

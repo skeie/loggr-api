@@ -59,16 +59,7 @@ const deleteExercise = (req, res, next) => {
 };
 
 const getAll = (req, res, next) => {
-  const { userId } = req.params;
-  service
-    .getAll(userId)
-    .then(data => {
-      res.json({ data });
-    })
-    .catch(error => {
-      console.log('error in getting all', error);
-      res.sendStatus(400);
-    });
+   console.log(request.user.id, 'yeah bro!')
 };
 
 // router.put('/:id/:index', updateExercise);

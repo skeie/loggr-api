@@ -5,10 +5,23 @@ class Dao {
         this.commonDao = new CommonDao();
     }
 
+    update = (userId, value) => {
+        return this.db
+            .none(
+                'update highscore set highscore = highscore + $1 where user_id = $2',
+                [value, userId],
+            )
+            .then(function({ id }) {
+                return id;
+            })
+            .catch(function(error) {
+                console.log('ERROR:', error.message || error); // print error;
+            });
+    };
     getAll = () => {
         return this.db
             .query(
-                `select user_id as userId, highscore, name from highscore inner join users s on s.id = user_id  order by highscore desc limit 5;`
+                `select user_id as userId, highscore, name from highscore inner join users s on s.id = user_id  order by highscore desc limit 5;`,
             )
             .then(data => data)
             .catch(error => {
@@ -19,15 +32,17 @@ class Dao {
 
     get = userId => {
         return this.db
-            .query(
+            .one(
                 `
       WITH summary AS (
         SELECT h.*,
           ROW_NUMBER() OVER(ORDER BY highscore DESC) AS position FROM highscore h)
         SELECT position FROM summary s
-        WHERE s.user_id = ${userId}`
+        WHERE s.user_id = ${userId}`,
             )
             .then(data => {
+                console.log('data', data);
+                
                 return data;
             })
             .catch(error => {
@@ -39,7 +54,7 @@ class Dao {
         return this.db
             .one(
                 'insert into highscore(user_id, highscore) values($1, $2) returning id',
-                [userId, highscore]
+                [userId, highscore],
             )
             .then(function({ id }) {
                 return id;

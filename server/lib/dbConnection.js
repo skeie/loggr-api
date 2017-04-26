@@ -2,7 +2,7 @@ const pgp = require('pg-promise')(/* options*/);
 const cn = {
   host: 'localhost',
   port: 5432,
-  database: 'loggr'
+  database: 'zyada'
 };
 const url =  process.env.DATABASE_URL || cn;
 var db = pgp(url);

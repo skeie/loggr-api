@@ -9,10 +9,10 @@ class Service {
     }
 
     update = (userId, amount) => {
-        return this.dao.getOne(id);
+        return this.dao.update(userId, amount);
     };
 
-    getAll = userId => {
+    getAll = userId => {        
         return Promise.all([this.dao.getAll(), this.dao.get(userId)])
             .then(([highscore, userHighScore]) => 
                 Promise.resolve({ highscore, userHighScore }));

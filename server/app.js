@@ -12,12 +12,16 @@ import element from './elements/elementRouter';
 import users from './users/userRouter';
 import highscore from './highscore/highscoreRouter';
 import workout from './workouts/workoutRouter';
+import images from './images/imageRouter';
+
+
 const favIconPath = '/public/favicon.ico';
-const favPath = process.env.NODE_ENV === 'prod' ?
-  (path.resolve('.') + '/server/' + favIconPath) : (__dirname + favIconPath);
+const favPath = process.env.NODE_ENV === 'prod'
+    ? path.resolve('.') + '/server/' + favIconPath
+    : __dirname + favIconPath;
 var app = express();
 
-app.set('port', (process.env.PORT || 3000));
+app.set('port', process.env.PORT || 3000);
 // connect to postgres
 dbConnection.pingPostgres();
 // debug url
@@ -30,13 +34,14 @@ app.use(methodOverride());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/exercises', exercises);
-app.use('/elements', element);
+// app.use('/exercises', exercises);
+// app.use('/elements', element);
 app.use('/users', users);
+app.use('/images', images);
 app.use('/highscore', highscore);
-app.use('/workout', workout);
+// app.use('/workout', workout);
 app.get('*', (req, res, next) => {
-  res.json({ hello: 'world' });
+    res.json({ hello: 'world' });
 });
 // catch 404 and forward to error handler
 // app.use((req, res, next) => {
@@ -70,8 +75,7 @@ app.get('*', (req, res, next) => {
 // });
 
 app.listen(app.get('port'), () => {
-  console.log('Node app is running on port', app.get('port'));
+    console.log('Node app is running on port', app.get('port'));
 });
-
 
 module.exports = app;
