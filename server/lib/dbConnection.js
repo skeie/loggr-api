@@ -4,7 +4,7 @@ const cn = {
   port: 5432,
   database: 'zyada'
 };
-const url =  process.env.DATABASE_URL || cn;
+const url =  process.env.DATABSE_URL || cn;
 var db = pgp(url);
 
 function pingPostgres() {
