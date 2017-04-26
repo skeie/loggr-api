@@ -7,8 +7,7 @@ class Dao {
 
     findGuildBasedOnUserid = id => {
         return this.db
-            .any(`SELECT name, users FROM guilds where $1 = ANY (users)`, [id])
-            .then(result => result[0])
+            .one(`SELECT name, users FROM guilds where $1 = ANY (users)`, [id])
             .catch(error => {
                 console.log('error in postingImageUrl', error);
                 return error;
