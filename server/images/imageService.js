@@ -16,6 +16,7 @@ class Service {
 
     postImageUrl = async (url, userId) => {
         const guild = await this.guildService.findGuildBasedOnUserid(userId);
+        console.log('this is guild!', guild)
         guild.users.forEach(receiverUserId => {
             if (receiverUserId !== userId) {
                 this.dao.postImageUrl(url, userId, receiverUserId);

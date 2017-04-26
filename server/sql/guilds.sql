@@ -5,3 +5,5 @@ create table IF NOT EXISTS guilds (
     updated timestamptz not null default now(),
     users integer[]
 );
+
+insert into guilds (name) values ('Founding fathers')

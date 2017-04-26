@@ -37,7 +37,7 @@ class Dao {
       WITH summary AS (
         SELECT h.*,
           ROW_NUMBER() OVER(ORDER BY highscore DESC) AS position FROM highscore h)
-        SELECT position FROM summary s
+        SELECT  highscore, position FROM summary s
         WHERE s.user_id = ${userId}`,
             )
             .catch(error => {
