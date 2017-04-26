@@ -8,7 +8,7 @@
     "clean": "rm -rf build && mkdir build",
     "build-server": "babel -d ./build ./server -s",
     "build": "npm run clean && npm install && npm run build-server",
-    "start": "NODE_ENV=prod node ./build/app.js"
+    "start": "NODE_ENV=prod node ./server/app"
   },
   "dependencies": {
     "@google-cloud/datastore": "^1.0.0",

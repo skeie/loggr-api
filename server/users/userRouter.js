@@ -1,8 +1,8 @@
-import express from 'express';
+const express = require('express');
 const router = express.Router();
-import Service from './userService';
-import { requireAuth } from '../util/jwtToken';
-const requireToken = requireAuth();
+const Service = require('./userService');
+const auth = require('../util/jwtToken');
+const requireToken = auth.requireAuth();
 const service = new Service();
 
 const createUser = (req, res, next) => {

@@ -1,19 +1,15 @@
-import express from 'express';
-import dbConnection from './lib/dbConnection';
-import path from 'path';
-import favicon from 'serve-favicon';
-import logger from 'morgan';
-import cookieParser from 'cookie-parser';
-import bodyParser from 'body-parser';
-import exercises from './exercises/exercisesRouter';
-import methodOverride from 'method-override';
-import expressValidator from 'express-validator';
-import element from './elements/elementRouter';
-import users from './users/userRouter';
-import highscore from './highscore/highscoreRouter';
-import workout from './workouts/workoutRouter';
-import images from './images/imageRouter';
-
+const express = require('express');
+const dbConnection = require('./lib/dbConnection');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const methodOverride = require('method-override');
+const expressValidator = require('express-validator');
+const users = require('./users/userRouter');
+const highscore = require('./highscore/highscoreRouter');
+const images = require('./images/imageRouter');
 
 const favIconPath = '/public/favicon.ico';
 const favPath = process.env.NODE_ENV === 'prod'

@@ -1,5 +1,5 @@
-import jwtToken from 'jsonwebtoken';
-import jwt from 'express-jwt';
+const jwtToken = require('jsonwebtoken');
+const jwt = require('express-jwt');
 
 export const secret =
     'qQDI9AO4LtMFC9NDMw9cM9PrFtEgkugW8Yie8R11LzzkNyjyLX1bmEKhoRoMKPm';
@@ -34,7 +34,7 @@ export function hasUserAuth(req, res, next) {
     }
 }
 
-function _fromHeaderOrQuerystring(req, res) {    
+function _fromHeaderOrQuerystring(req, res) {
     if (
         req.headers.authorization &&
         req.headers.authorization.split(' ')[0] === 'Bearer'

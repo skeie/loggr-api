@@ -1,7 +1,7 @@
-import { post } from '../util/util';
-import { onesignalAuth, onesignalUrl, onesignalAppId } from '../util/config';
-import Guildservice from '../guilds/guildService';
-import UserService from '../users/userService';
+const config = require('../util/config');
+const fetch = require('../util/util');
+const Guildservice = require('../guilds/guildService');
+const UserService = require('../users/userService');
 
 const newWorkout = username =>
     `Hurry up! ${username} has just finished a workout. Approve his session now to compete for his bananas 🍌`;
@@ -15,13 +15,13 @@ class Service {
     }
     _generateMessage = (userId, text) => ({
         include_player_ids: [userId],
-        app_id: onesignalAppId,
+        app_id: config.onesignalAppId,
         contents: {
             en: text,
         },
     });
     _sendPush = (userId, text) => {
-        post(onesignalUrl, this._generateMessage(userId, text), onesignalAuth);
+        fetch.post(config.onesignalUrl, this._generateMessage(userId, text), config.onesignalAuth);
     };
     sendPushToGuild = async userId => {
         const guild = await this.guildservice.findGuildBasedOnUserid(userId);

@@ -1,10 +1,10 @@
-import express from 'express';
+const express = require('express');
 const router = express.Router();
-import Service from './highscoreService';
+const Service = require('./highscoreService');
 const service = new Service();
-import { requireAuth } from '../util/jwtToken';
-const requireToken = requireAuth();
-import isEmpty from 'lodash/isEmpty';
+const auth = require('../util/jwtToken');
+const requireToken = auth.requireAuth();
+const isEmpty = require('lodash/isEmpty');
 
 const getAll = (req, res, next) => {
     const errors = validate('user', req);
@@ -15,8 +15,8 @@ const getAll = (req, res, next) => {
     service
         .getAll(req.user.id)
         .then(data => {
-          console.log('data', data);
-          
+            console.log('data', data);
+
             res.json(data);
         })
         .catch(() => {
