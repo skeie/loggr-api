@@ -2,42 +2,22 @@ const config = require('../util/config');
 const fetch = require('../util/util');
 const Guildservice = require('../guilds/guildService');
 const UserService = require('../users/userService');
+const pushUtil = require('./pushUtil');
 
-const showHighScore = {
-    showHighScore: true,
-};
-
-const newWorkout = username => ({
-    contents: {
-        en: `${username} has just finished a workout. Approve his session now to compete for his bananas 🍌`,
-    },
-    headings: {
-        en: 'Hurry up! - compete for 🍌',
-    },
-});
-const approvedWorkout = (amount, approvedPersonName) => ({
-    contents: {
-        en: `Yay! Your training just got approved. You just recieved ${amount} new banans 🍌!!`,
-    },
-    headings: {
-        en: `${approvedPersonName} approved your training`,
-    },
-});
 class Service {
     constructor(userService) {
         this.guildservice = new Guildservice();
         this.userService = userService || new UserService();
     }
-    _generateMessage = (userId, content, data = {}) => ({
+    _generateMessage = (userId, content) => ({
         include_player_ids: [userId],
         app_id: config.onesignalAppId,
         ...content,
-        data,
     });
-    _sendPush = (userId, content, obj) => {
+    _sendPush = (userId, content) => {
         fetch.post(
             config.onesignalUrl,
-            this._generateMessage(userId, content, obj),
+            this._generateMessage(userId, content),
             config.onesignalAuth,
         );
     };
@@ -54,18 +34,20 @@ class Service {
         pushTokens.forEach(
             ({ pushToken }) =>
                 pushToken &&
-                this._sendPush(pushToken, newWorkout(userWithTraining.name)),
+                this._sendPush(
+                    pushToken,
+                    pushUtil.newWorkout(userWithTraining.name),
+                ),
         );
     };
-    sendPushToOne = async (userId, amount, approvedPersonName) => {
-        const { pushToken, name } = await this.userService.getUserPushToken(
-            userId,
-        );
-        this._sendPush(
-            pushToken,
-            approvedWorkout(amount, approvedPersonName),
-            showHighScore,
-        );
+    sendPushToOne = async (userGettingPushId, content, userThatDidActionId) => {
+        const [{ pushToken }, { name }] = await Promise.all([
+            this.userService.getUserPushToken(userGettingPushId),
+            this.userService.getUserById(userThatDidActionId),
+        ]);
+
+        content = content(name);
+        this._sendPush(pushToken, content);
     };
 }
 module.exports = Service;

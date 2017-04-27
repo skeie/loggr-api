@@ -21,7 +21,7 @@ class Dao {
     getUnSeenImage = userId => {
         return this.db
             .any(
-                'select url, image, images.id from images left JOIN users s on (s.id = images.sender_user_id) where receiver_user_id = $1 and has_seen = false;',
+                'select url, image, images.id from images left JOIN users s on (s.id = images.sender_user_id) where receiver_user_id = $1 and has_seen = false and is_declined = false;',
                 [userId],
             )
             .catch(error => {
@@ -29,6 +29,12 @@ class Dao {
                 return error;
             });
     };
+
+    setImageDecline = imageId =>
+        this.db.one(
+            `update images set is_declined = true where id = $1 RETURNING sender_user_id as "senderUserId"`,
+            [imageId],
+        );
 
     setImageSeen = id => {
         return this.db

@@ -5,4 +5,7 @@ create table IF NOT EXISTS images (
     has_seen boolean default false,
     url varchar(200) not null default '',
     created timestamptz not null default now()
+    is_declined boolean default false
 );
+
+alter table images add column is_declined boolean default false

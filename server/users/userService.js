@@ -1,5 +1,5 @@
 const jwtToken = require('../util/jwtToken');
-
+const pushUtil = require('../pushNotification/pushUtil');
 class Service {
     constructor(dao, commonDao) {
         const userDAO = dao || require('./userDAO');
@@ -20,7 +20,6 @@ class Service {
 
     increaseStreak = async (numberOfApprovedImages, userId, approvedUserId) => {
         const { weeklyTraining, streak } = await this.dao.getUserById(userId);
-        const { name } = await this.dao.getUserById(approvedUserId);
         let score = streak > 0
             ? streak * numberOfApprovedImages
             : numberOfApprovedImages;
@@ -31,11 +30,15 @@ class Service {
         if (weeklyTraining < numberOfApprovedImages) {
             score = 1;
         }
-        
+
         this.highscoreService.update(userId, score);
-        this.pushService.sendPushToOne(userId, score, name);
+        const content = this._generateContent(score);
+        this.pushService.sendPushToOne(userId, content);
         return Promise.resolve(score);
     };
+
+    _generateContent = score => name => pushUtil.approvedWorkout(score, name);
+
     getUserPushToken = userId => this.dao.getUserPushToken(userId);
     createUser = async loggedInUser => {
         const user = await this.dao.getUserWithEmail(loggedInUser.email);

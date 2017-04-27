@@ -12,6 +12,7 @@ class Service {
         this.guildService = new GuildService();
         this.pushService = new PushService();
         this.userService = new UserService();
+        this.pushUtil = require('../pushNotification/pushUtil');
     }
 
     postImageUrl = async (url, userId) => {
@@ -59,6 +60,12 @@ class Service {
         ]);
 
         return { images: [...unSeenImage], numberOfImages };
+    };
+
+    setImageDecline = async (imageId, userId) => {
+        const { senderUserId } = await this.dao.setImageDecline(imageId);
+        const contentReference = this.pushUtil.declinedWorkout;
+        this.pushService.sendPushToOne(senderUserId, contentReference, userId);
     };
 }
 

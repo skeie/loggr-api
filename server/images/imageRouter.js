@@ -16,7 +16,7 @@ const multer = Multer({
     fileSize: 5 * 1024 * 1024,
 });
 
-// Service.setImageSeen(1, 9);
+// Service.postImageUrl('fail', 9);
 
 router.get('/unSeen', requireToken, async (req, response) => {
     try {
@@ -24,6 +24,21 @@ router.get('/unSeen', requireToken, async (req, response) => {
         response.json(unSeenImgs);
     } catch (error) {
         console.log('error in unseen router', error);
+
+        response.sendStatus(400);
+    }
+});
+
+router.put('/unSeen/:imageId/decline', requireToken, async (req, response) => {
+    try {
+        Service.setImageDecline(req.params.imageId, req.user.id);
+        response.sendStatus(201);
+    } catch (error) {
+        console.log(
+            'error in unseen/imageid router',
+            error,
+            req.params.imageId,
+        );
 
         response.sendStatus(400);
     }
