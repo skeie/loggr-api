@@ -18,8 +18,9 @@ class Service {
         return this.dao.getUserById(userId);
     };
 
-    increaseStreak = (numberOfApprovedImages, userId) => {
-        const { weeklyTraining, streak } = this.dao.getUserById(userId);
+    increaseStreak = async (numberOfApprovedImages, userId, approvedUserId) => {
+        const { weeklyTraining, streak } = await this.dao.getUserById(userId);
+        const { name } = await this.dao.getUserById(approvedUserId);
         let score = streak > 0
             ? streak * numberOfApprovedImages
             : numberOfApprovedImages;
@@ -32,7 +33,7 @@ class Service {
         }
         
         this.highscoreService.update(userId, score);
-        this.pushService.sendPushToOne(userId, score);
+        this.pushService.sendPushToOne(userId, score, name);
         return Promise.resolve(score);
     };
     getUserPushToken = userId => this.dao.getUserPushToken(userId);

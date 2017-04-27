@@ -16,7 +16,9 @@ const multer = Multer({
     fileSize: 5 * 1024 * 1024,
 });
 
-router.get('/unSeen', requireToken, async (req, response) => {    
+// Service.setImageSeen(1, 9);
+
+router.get('/unSeen', requireToken, async (req, response) => {
     try {
         const unSeenImgs = await Service.getUnSeenImage(req.user.id);
         response.json(unSeenImgs);
@@ -32,7 +34,11 @@ router.put('/unSeen/:imageId', requireToken, async (req, response) => {
         const res = await Service.setImageSeen(req.params.imageId, req.user.id);
         response.json(res);
     } catch (error) {
-        console.log('error in unseen/imageid router', error, req.params.imageId);
+        console.log(
+            'error in unseen/imageid router',
+            error,
+            req.params.imageId,
+        );
 
         response.sendStatus(400);
     }
