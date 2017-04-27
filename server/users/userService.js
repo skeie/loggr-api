@@ -33,7 +33,7 @@ class Service {
 
         this.highscoreService.update(userId, score);
         const content = this._generateContent(score);
-        this.pushService.sendPushToOne(userId, content);
+        this.pushService.sendPushToOne(userId, content, approvedUserId);
         return Promise.resolve(score);
     };
 

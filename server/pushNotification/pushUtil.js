@@ -30,7 +30,7 @@ export const approvedWorkout = (amount, approvedPersonName) => ({
 });
 export const declinedWorkout = declinedPersonName => ({
     contents: {
-        en: `Your training just got declined. Try again!`,
+        en: `Your training just got declined!`,
     },
     headings: {
         en: `💩💩💩💩! ${declinedPersonName} declined your training`,

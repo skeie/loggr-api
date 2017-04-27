@@ -44,12 +44,14 @@ class Service {
         let hasSomeoneSeenImage = await this.dao.isFirstToSeeImage(imageId);
         hasSomeoneSeenImage = Boolean(hasSomeoneSeenImage.length);
         this.dao.setImageSeen(imageId);
-        if (!hasSomeoneSeenImage)
+
+        if (!hasSomeoneSeenImage) {
             score = await this._increaseStreak(
                 userId,
                 imageId,
                 hasSomeoneSeenImage,
             );
+        }
         return Promise.resolve({ hasSomeoneSeenImage, score });
     };
 
