@@ -42,10 +42,10 @@ class Service {
     setImageSeen = async (imageId, userId) => {
         let score = 0;
         let hasSomeoneSeenImage = await this.dao.isFirstToSeeImage(imageId);
-        hasSomeoneSeenImage = Boolean(hasSomeoneSeenImage.length);
         this.dao.setImageSeen(imageId);
 
         if (!hasSomeoneSeenImage) {
+            this.dao.setFirstToSeeImage(imageId);
             score = await this._increaseStreak(
                 userId,
                 imageId,

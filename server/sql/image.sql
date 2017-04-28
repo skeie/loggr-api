@@ -4,8 +4,10 @@ create table IF NOT EXISTS images (
     receiver_user_id serial REFERENCES users ON DELETE CASCADE,
     has_seen boolean default false,
     url varchar(200) not null default '',
-    created timestamptz not null default now()
-    is_declined boolean default false
+    created timestamptz not null default now(),
+    is_declined boolean default false,
+    is_first_to_approve boolean default false
 );
 
 alter table images add column is_declined boolean default false
+alter table images add column is_first_to_approve boolean default false

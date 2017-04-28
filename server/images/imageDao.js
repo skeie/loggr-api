@@ -58,8 +58,8 @@ class Dao {
     };
     isFirstToSeeImage = imageId =>
         this.db
-            .any(
-                'select images.has_seen from images left join images i on (images.url = i.url) where i.id = $1 and images.has_seen = true',
+            .one(
+                'select name from images left join users s on (s.id = images.receiver_user_id) where url = (select url from images where id = $1) and is_first_to_approve = true',
                 [imageId],
             )
             .catch(error => {
@@ -77,6 +77,18 @@ class Dao {
             .catch(error => {
                 console.log('error in imagesApproveThisWeek', error);
                 return error;
+            });
+    };
+
+    setFirstToSeeImage = imageId => {
+        this.db
+            .none(
+                'update images set is_first_to_approve = true where id = $1',
+                [imageId],
+            )
+            .catch(err => {
+                console.log('error in setFirstToSeeImage', err);
+                return err;
             });
     };
 }
