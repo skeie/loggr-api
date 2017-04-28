@@ -58,10 +58,11 @@ class Dao {
     };
     isFirstToSeeImage = imageId =>
         this.db
-            .one(
+            .any(
                 'select name from images left join users s on (s.id = images.receiver_user_id) where url = (select url from images where id = $1) and is_first_to_approve = true',
                 [imageId],
             )
+            .then(data => data[0])
             .catch(error => {
                 console.log('error in isFirstToSeeImage', error);
                 return error;
