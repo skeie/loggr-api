@@ -28,10 +28,10 @@ class Service {
     imagesApproveThisWeek = userId => this.dao.imagesApproveThisWeek(userId);
 
     _increaseStreak = async (userId, imageId, hasSomeoneSeenImage) => {
-        const [numberOfApprovedImages, { senderUserId }] = await Promise.all([
-            this.imagesApproveThisWeek(userId),
-            this.dao.getSenderId(imageId),
-        ]);
+        const { senderUserId } = await this.dao.getSenderId(imageId);
+        const numberOfApprovedImages = await this.imagesApproveThisWeek(
+            senderUserId,
+        );
 
         return this.userService.increaseStreak(
             numberOfApprovedImages,

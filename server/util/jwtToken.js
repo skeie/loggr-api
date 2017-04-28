@@ -1,7 +1,7 @@
 const jwtToken = require('jsonwebtoken');
 const jwt = require('express-jwt');
 
-export const secret =
+const secret =
     'qQDI9AO4LtMFC9NDMw9cM9PrFtEgkugW8Yie8R11LzzkNyjyLX1bmEKhoRoMKPm';
 
 export function generateToken(user) {

@@ -58,7 +58,7 @@ class Dao {
                 return id;
             })
             .catch(function(error) {
-                console.log('ERROR:', error.message || error); // print error;
+                console.log('ERROR in createUser:', error.message || error); // print error;
             });
     };
 }

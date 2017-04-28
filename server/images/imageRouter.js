@@ -16,7 +16,7 @@ const multer = Multer({
     fileSize: 5 * 1024 * 1024,
 });
 
-// Service.postImageUrl('fail', 9);
+// Service.setImageSeen(102, 9);
 
 router.get('/unSeen', requireToken, async (req, response) => {
     try {

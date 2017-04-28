@@ -20,9 +20,11 @@ class Service {
 
     increaseStreak = async (numberOfApprovedImages, userId, approvedUserId) => {
         const { weeklyTraining, streak } = await this.dao.getUserById(userId);
-        let score = streak > 0
+
+        let score = streak > 1
             ? streak * numberOfApprovedImages
             : numberOfApprovedImages;
+
         if (weeklyTraining === numberOfApprovedImages) {
             this.dao.incrementStreak(userId);
         }

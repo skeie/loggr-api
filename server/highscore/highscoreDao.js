@@ -7,21 +7,24 @@ class Dao {
 
     update = (userId, value) => {
         return this.db
-            .none(
-                'update highscore set highscore = highscore + $1 where user_id = $2',
-                [value, userId],
+            .one(
+                'update highscore set highscore = highscore + $2 where user_id = $1 returning id',
+                [userId, value],
             )
             .then(function({ id }) {
                 return id;
             })
             .catch(function(error) {
-                console.log('ERROR:', error.message || error); // print error;
+                console.log(
+                    'ERROR in update highscore:',
+                    error.message || error,
+                ); // print error;
             });
     };
     getAll = () => {
         return this.db
             .query(
-                `select user_id as userId, highscore, name from highscore inner join users s on s.id = user_id  order by highscore desc limit 5;`,
+                `select user_id as userId, highscore, name, image from highscore inner join users s on s.id = user_id  order by highscore desc limit 5;`,
             )
             .then(data => data)
             .catch(error => {
@@ -41,6 +44,7 @@ class Dao {
         WHERE s.user_id = ${userId}`,
             )
             .catch(error => {
+                console.log('error in get highscore', error, userId);
                 return error;
             });
     };
@@ -55,7 +59,10 @@ class Dao {
                 return id;
             })
             .catch(function(error) {
-                console.log('ERROR:', error.message || error); // print error;
+                console.log(
+                    'ERROR in create highscore :',
+                    error.message || error,
+                ); // print error;
             });
     };
 }

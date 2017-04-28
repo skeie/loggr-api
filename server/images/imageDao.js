@@ -69,16 +69,11 @@ class Dao {
 
     imagesApproveThisWeek = userId => {
         return this.db
-            .any(
+            .one(
                 `SELECT count(DISTINCT url) from images where to_char(created::date, 'IYYY_IW') = to_char(now()::date, 'IYYY_IW') and has_seen = true and sender_user_id = $1;`,
                 [userId],
             )
-            .then(
-                data =>
-                    (data[0]
-                        ? (data[0].count = parseInt(data[0].count, 10))
-                        : 0),
-            )
+            .then(({ count }) => parseInt(count, 10))
             .catch(error => {
                 console.log('error in imagesApproveThisWeek', error);
                 return error;
