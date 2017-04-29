@@ -25,11 +25,13 @@ class Service {
         const guild = await this.guildservice.findGuildBasedOnUserid(userId);
         const userWithTraining = await this.userService.getUserById(userId);
         const pushTokens = await Promise.all(
-            guild.users.map(
-                currentUserId =>
-                    currentUserId !== userId &&
-                    this.userService.getUserPushToken(currentUserId),
-            ),
+            guild.users.map(currentUserId => {
+                if (currentUserId !== userId) {
+                    return this.userService.getUserPushToken(currentUserId);
+                } else {
+                    return Promise.resolve({});
+                }
+            }),
         );
         pushTokens.forEach(
             ({ pushToken }) =>
@@ -45,7 +47,6 @@ class Service {
             this.userService.getUserPushToken(userGettingPushId),
             this.userService.getUserById(userThatDidActionId),
         ]);
-
         content = content(name);
         this._sendPush(pushToken, content);
     };

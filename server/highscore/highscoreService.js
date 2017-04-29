@@ -10,10 +10,12 @@ class Service {
         return this.dao.update(userId, amount);
     };
 
-    getAll = userId => {        
-        return Promise.all([this.dao.getAll(), this.dao.get(userId)])
-            .then(([highscore, userHighScore]) => 
-                Promise.resolve({ highscore, userHighScore }));
+    getAll = async userId => {
+        const [highscore, userHighScore] = await Promise.all([
+            this.dao.getAll(),
+            this.dao.get(userId),
+        ]);
+        return { highscore, userHighScore };
     };
 
     create = (userId, isOldUser) => {
