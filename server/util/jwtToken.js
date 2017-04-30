@@ -1,5 +1,8 @@
 const jwtToken = require('jsonwebtoken');
 const jwt = require('express-jwt');
+const jwtDecode = require('jwt-decode');
+
+let prevUser = {};
 
 const secret =
     'qQDI9AO4LtMFC9NDMw9cM9PrFtEgkugW8Yie8R11LzzkNyjyLX1bmEKhoRoMKPm';
@@ -20,25 +23,21 @@ export function requireAuth() {
     });
 }
 
-export function hasUserAuth(req, res, next) {
-    const token = _fromHeaderOrQuerystring(req, res);
-    const urlUserId = req.params.userId;
-    const loggedInUserId = req.user ? req.user.id : 0;
-    if (parseInt(urlUserId, 10) !== loggedInUserId) {
-        next({
-            message: 'User is not authorized to perform this action',
-            status: 401,
-        });
-    } else {
-        next();
-    }
-}
-
 function _fromHeaderOrQuerystring(req, res) {
     if (
         req.headers.authorization &&
         req.headers.authorization.split(' ')[0] === 'Bearer'
     ) {
-        return req.headers.authorization.split(' ')[1];
+        const token = req.headers.authorization.split(' ')[1];
+        logUser(token);
+        return token;
     }
 }
+
+const logUser = token => {
+    const user = jwtDecode(token);
+    if (prevUser.id !== user.id) {
+        console.log('user: ', user);
+        prevUser = user;
+    }
+};
