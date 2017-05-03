@@ -14,7 +14,7 @@ export const newWorkout = username => ({
         en: 'Hurry up! - compete for 🍌',
     },
     data: {
-        ...showHighScore,
+        ...showImagePreview,
     },
 });
 export const approvedWorkout = (amount, approvedPersonName) => ({
@@ -25,7 +25,7 @@ export const approvedWorkout = (amount, approvedPersonName) => ({
         en: `${approvedPersonName} approved your training`,
     },
     data: {
-        ...showImagePreview,
+        ...showHighScore,
     },
 });
 export const declinedWorkout = declinedPersonName => ({
@@ -34,8 +34,5 @@ export const declinedWorkout = declinedPersonName => ({
     },
     headings: {
         en: `💩💩💩💩! ${declinedPersonName} declined your training`,
-    },
-    data: {
-        ...showImagePreview,
     },
 });
