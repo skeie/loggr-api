@@ -14,10 +14,10 @@ class Service {
         app_id: config.onesignalAppId,
         ...content,
     });
-    _sendPush = (userId, content) => {
+    _sendPush = (pushToken, content) => {
         fetch.post(
             config.onesignalUrl,
-            this._generateMessage(userId, content),
+            this._generateMessage(pushToken, content),
             config.onesignalAuth,
         );
     };
@@ -47,6 +47,7 @@ class Service {
             this.userService.getUserPushToken(userGettingPushId),
             this.userService.getUserById(userThatDidActionId),
         ]);
+        console.log(`Sending push to: ${name} with pushtoken: ${pushToken}`);
         content = content(name);
         this._sendPush(pushToken, content);
     };
