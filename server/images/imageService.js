@@ -45,7 +45,7 @@ class Service {
         this.dao.setImageSeen(imageId);
 
         if (!hasSomeoneSeenImage) {
-            this.dao.setFirstToSeeImage(imageId);
+            await this.dao.setFirstToSeeImage(imageId);
             score = await this._increaseStreak(
                 userId,
                 imageId,
