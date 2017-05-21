@@ -33,6 +33,11 @@ class Dao {
             [userId],
         );
     };
+    setStreakToNull = userId => {
+        return this.db.none('update users set streak = 0 where id = $1', [
+            userId,
+        ]);
+    };
     getUserById = userId => {
         return this.db
             .one(
@@ -61,6 +66,11 @@ class Dao {
                 console.log('ERROR in createUser:', error.message || error); // print error;
             });
     };
+
+    getAllUsers = () =>
+        this.db.any('select * from users').catch(err => {
+            console.log('err in getAllUsers', err);
+        });
 }
 
 module.exports = Dao;

@@ -10,12 +10,14 @@ const expressValidator = require('express-validator');
 const users = require('./users/userRouter');
 const highscore = require('./highscore/highscoreRouter');
 const images = require('./images/imageRouter');
-
+const cronJob = require('./util/cron');
 const favIconPath = '/public/favicon.ico';
 const favPath = process.env.NODE_ENV === 'prod'
     ? path.resolve('.') + '/server/' + favIconPath
     : __dirname + favIconPath;
 var app = express();
+
+cronJob();
 
 app.set('port', process.env.PORT || 3000);
 // connect to postgres

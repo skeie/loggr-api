@@ -1,5 +1,6 @@
 const jwtToken = require('../util/jwtToken');
 const pushUtil = require('../pushNotification/pushUtil');
+
 class Service {
     constructor(dao, commonDao) {
         const userDAO = dao || require('./userDAO');
@@ -12,11 +13,16 @@ class Service {
         this.guildService = new GuildService();
         this.dao = new userDAO();
         this.commonDao = new CommonDao();
+        // this.increaseStreak(10, 7, 9);
     }
 
     getUserById = userId => {
         return this.dao.getUserById(userId);
     };
+
+    getAllUsers = () => this.dao.getAllUsers();
+
+    setStreakToNull = userId => this.dao.setStreakToNull();
 
     increaseStreak = async (numberOfApprovedImages, userId, approvedUserId) => {
         const { weeklyTraining, streak } = await this.dao.getUserById(userId);
@@ -24,6 +30,10 @@ class Service {
         let score = streak > 1
             ? streak * numberOfApprovedImages
             : numberOfApprovedImages;
+
+        console.log(
+            `Hva er score som brukeren får tilbake: ${score} - hva er number of approved images: ${numberOfApprovedImages}`,
+        );
 
         if (weeklyTraining === numberOfApprovedImages) {
             this.dao.incrementStreak(userId);
@@ -45,6 +55,7 @@ class Service {
     getUserPushToken = userId => this.dao.getUserPushToken(userId);
     createUser = async loggedInUser => {
         const user = await this.dao.getUserWithEmail(loggedInUser.email);
+
         if (Boolean(user)) {
             this.commonDao.update(user.id, loggedInUser, 'users');
             return { ...user, jwtToken: jwtToken.generateToken(user) };
