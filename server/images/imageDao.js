@@ -52,7 +52,7 @@ class Dao {
                 [imageId],
             )
             .catch(error => {
-                console.log('error in setImageSeen', error);
+                console.log('error in getSenderId', error);
                 return error;
             });
     };

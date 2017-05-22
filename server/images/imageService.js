@@ -27,7 +27,7 @@ class Service {
 
     imagesApproveThisWeek = userId => this.dao.imagesApproveThisWeek(userId);
 
-    _increaseStreak = async (userId, imageId, hasSomeoneSeenImage) => {
+    _increaseStreak = async (userId, imageId) => {
         const { senderUserId } = await this.dao.getSenderId(imageId);
         const numberOfApprovedImages = await this.imagesApproveThisWeek(
             senderUserId,
@@ -42,15 +42,11 @@ class Service {
     setImageSeen = async (imageId, userId) => {
         let score = 0;
         let hasSomeoneSeenImage = await this.dao.isFirstToSeeImage(imageId);
-        this.dao.setImageSeen(imageId);
+        await this.dao.setImageSeen(imageId); // needs to wait for this so has_seen is being set before we calculate the score
 
         if (!hasSomeoneSeenImage) {
-            await this.dao.setFirstToSeeImage(imageId);
-            score = await this._increaseStreak(
-                userId,
-                imageId,
-                hasSomeoneSeenImage,
-            );
+            this.dao.setFirstToSeeImage(imageId);
+            score = await this._increaseStreak(userId, imageId);
         }
         return Promise.resolve({ hasSomeoneSeenImage, score });
     };
