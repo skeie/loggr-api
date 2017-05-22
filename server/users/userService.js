@@ -50,6 +50,10 @@ class Service {
         return Promise.resolve(score);
     };
 
+    _removeEmptyProperties = user => {
+        Object.keys(user).forEach(key => user[key] == '' && delete user[key]);
+    };
+
     _generateContent = score => name => pushUtil.approvedWorkout(score, name);
 
     getUserPushToken = userId => this.dao.getUserPushToken(userId);
@@ -57,8 +61,13 @@ class Service {
         const user = await this.dao.getUserWithEmail(loggedInUser.email);
 
         if (Boolean(user)) {
+            this._removeEmptyProperties(loggedInUser);
             this.commonDao.update(user.id, loggedInUser, 'users');
-            return { ...user, jwtToken: jwtToken.generateToken(user) };
+            return {
+                ...user,
+                jwtToken: jwtToken.generateToken(user),
+                ...loggedInUser,
+            };
         } else {
             const id = await this.dao.createUser(loggedInUser);
             this.highscoreService.create(id);
