@@ -20,6 +20,10 @@ class Service {
         return this.dao.getUserById(userId);
     };
 
+    updateUser = (userId, data) => {
+        this.commonDao.update(userId, data, 'users');
+    };
+
     getAllUsers = () => this.dao.getAllUsers();
 
     setStreakToNull = userId => this.dao.setStreakToNull();
@@ -50,10 +54,6 @@ class Service {
         return Promise.resolve(score);
     };
 
-    _removeEmptyProperties = user => {
-        Object.keys(user).forEach(key => user[key] == '' && delete user[key]);
-    };
-
     _generateContent = score => name => pushUtil.approvedWorkout(score, name);
 
     getUserPushToken = userId => this.dao.getUserPushToken(userId);
@@ -61,8 +61,7 @@ class Service {
         const user = await this.dao.getUserWithEmail(loggedInUser.email);
 
         if (Boolean(user)) {
-            this._removeEmptyProperties(loggedInUser);
-            this.commonDao.update(user.id, loggedInUser, 'users');
+            this.updateUser(user.id, loggedInUser);
             return {
                 ...user,
                 jwtToken: jwtToken.generateToken(user),

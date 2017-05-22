@@ -31,8 +31,19 @@ const getUserById = (req, res, next) => {
         });
 };
 
+const updateUser = async (req, res, next) => {
+    try {
+        await service.updateUser(req.user.id, req.body);
+        res.send(201);
+    } catch (e) {
+        console.log('error updateUser router', e);
+        next();
+    }
+};
+
 router.post('/', createUser);
 router.get('/', requireToken, getUserById);
+router.put('/', requireToken, updateUser);
 
 const validate = (param, req) => {
     const errors = req.validationErrors();

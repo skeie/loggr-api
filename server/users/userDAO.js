@@ -14,13 +14,10 @@ class Dao {
     };
     getUserWithEmail = email => {
         return this.db
-            .any(
+            .one(
                 `select id, name, weekly_training as "weeklyTraining",  image, email from users where email=$1`,
                 [email],
             )
-            .then(function(data) {
-                return data[0]; //assume there is only one
-            })
             .catch(function(error) {
                 console.log('no user found', error);
                 return false;
