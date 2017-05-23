@@ -64,8 +64,8 @@ class Service {
             this.updateUser(user.id, loggedInUser);
             return {
                 ...user,
-                jwtToken: jwtToken.generateToken(user),
                 ...loggedInUser,
+                jwtToken: jwtToken.generateToken(user),
             };
         } else {
             const id = await this.dao.createUser(loggedInUser);
