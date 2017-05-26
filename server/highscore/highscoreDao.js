@@ -17,6 +17,23 @@ class Dao {
             });
     };
 
+    update = (userId, value) => {
+        return this.db
+            .one(
+                'update highscore set highscore = highscore + $2 where user_id = $1 returning id',
+                [userId, value],
+            )
+            .then(function({ id }) {
+                return id;
+            })
+            .catch(function(error) {
+                console.log(
+                    'ERROR in update highscore:',
+                    error.message || error,
+                ); // print error;
+            });
+    };
+
     getHighScoreBasedOnGuild = userIds =>
         this.db
             .any(
@@ -47,7 +64,7 @@ class Dao {
             });
     };
 
-    create = (userId) => {
+    create = userId => {
         return this.db
             .one(
                 'insert into highscore(user_id, highscore) values($1, $2) returning id',
