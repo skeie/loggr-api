@@ -12,6 +12,7 @@ const highscore = require('./highscore/highscoreRouter');
 const images = require('./images/imageRouter');
 const cronJob = require('./util/cron');
 const favIconPath = '/public/favicon.ico';
+const guilds = require('./guilds/guildRouter');
 const favPath = process.env.NODE_ENV === 'prod'
     ? path.resolve('.') + '/server/' + favIconPath
     : __dirname + favIconPath;
@@ -37,6 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/users', users);
 app.use('/images', images);
 app.use('/highscore', highscore);
+app.use('/guilds', guilds);
 // app.use('/workout', workout);
 // app.get('*', (req, res, next) => {
 //     res.json({ hello: 'world' });

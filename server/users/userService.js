@@ -70,7 +70,7 @@ class Service {
         } else {
             const id = await this.dao.createUser(loggedInUser);
             this.highscoreService.create(id);
-            this.guildService.addUserToGuild(id, 1);
+            this.guildService.addUserToGuild(id, loggedInUser.guildId);
             return {
                 loggedInUser,
                 id,

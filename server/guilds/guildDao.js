@@ -24,6 +24,11 @@ class Dao {
                 console.log('error in addUserToGuild', error);
             });
     };
+    getAllGuilds = () =>
+        this.db
+            .any('select name, id, array_length(users, 1) as size from guilds')
+            .then(guilds => ({ guilds }))
+            .catch(err => console.log('error in getAllGuilds', error));
 }
 
 module.exports = Dao;

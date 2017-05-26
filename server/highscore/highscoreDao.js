@@ -5,22 +5,6 @@ class Dao {
         this.commonDao = new CommonDao();
     }
 
-    update = (userId, value) => {
-        return this.db
-            .one(
-                'update highscore set highscore = highscore + $2 where user_id = $1 returning id',
-                [userId, value],
-            )
-            .then(function({ id }) {
-                return id;
-            })
-            .catch(function(error) {
-                console.log(
-                    'ERROR in update highscore:',
-                    error.message || error,
-                ); // print error;
-            });
-    };
     getAll = () => {
         return this.db
             .query(
@@ -32,6 +16,20 @@ class Dao {
                 return error;
             });
     };
+
+    getHighScoreBasedOnGuild = userIds =>
+        this.db
+            .any(
+                `select user_id as userId, highscore, name, image from highscore inner join users s on s.id = user_id where s.id = ANY ($1) order by highscore desc`,
+                [userIds],
+            )
+            .then(res => {
+                console.log(res);
+                return res;
+            })
+            .catch(err =>
+                console.log('error in getHighScoreBasedOnGuild', err),
+            );
 
     get = userId => {
         return this.db
@@ -49,11 +47,11 @@ class Dao {
             });
     };
 
-    create = (userId, highscore) => {
+    create = (userId) => {
         return this.db
             .one(
                 'insert into highscore(user_id, highscore) values($1, $2) returning id',
-                [userId, highscore],
+                [userId, 0],
             )
             .then(function({ id }) {
                 return id;
