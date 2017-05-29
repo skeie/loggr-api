@@ -33,7 +33,7 @@ class Service {
                 }
             }),
         );
-        console.log('Sending push to ' + pushTokens);
+        console.log('Sending push to ' + JSON.stringify(pushTokens));
         pushTokens.forEach(
             ({ pushToken }) =>
                 pushToken &&

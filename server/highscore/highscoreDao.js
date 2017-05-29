@@ -40,10 +40,6 @@ class Dao {
                 `select user_id as userId, highscore, name, image from highscore inner join users s on s.id = user_id where s.id = ANY ($1) order by highscore desc`,
                 [userIds],
             )
-            .then(res => {
-                console.log(res);
-                return res;
-            })
             .catch(err =>
                 console.log('error in getHighScoreBasedOnGuild', err),
             );
