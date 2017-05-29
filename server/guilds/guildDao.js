@@ -17,7 +17,7 @@ class Dao {
     addUserToGuild = (userId, guildId) => {
         return this.db
             .none(
-                'update guilds set users = array_append(users, $2) where id = $1',
+                'update guilds set users = array_append(users, $2) where id = $1 and not ($2 = ANY (users))',
                 [guildId, userId],
             )
             .catch(error => {
