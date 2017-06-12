@@ -26,6 +26,8 @@ class Service {
 
     getAllUsers = () => this.dao.getAllUsers();
 
+    getAllUserz = () => this.dao.getAllUsers().then(data => data);
+
     setStreakToNull = userId => this.dao.setStreakToNull();
 
     increaseStreak = async (numberOfApprovedImages, userId, approvedUserId) => {

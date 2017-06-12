@@ -21,6 +21,7 @@
     "express": "~4.12.2",
     "express-jwt": "^5.1.0",
     "express-validator": "^2.20.8",
+    "graphql": "^0.10.1",
     "install": "^0.8.7",
     "jimp": "^0.2.27",
     "jsonwebtoken": "^7.3.0",

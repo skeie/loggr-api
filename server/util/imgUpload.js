@@ -20,6 +20,10 @@ ImgUpload.uploadToGcs = async (req, res, next) => {
     if (!req.file) return next();
     let name = 'zyada' + '-' + Date.now() + '.jpg';
 
+    // req.file.cloudStorageObject = name;
+    // req.file.cloudStoragePublicUrl = getPublicUrl(name);
+    // next();
+    return;
     try {
         const readImg = await Jimp.read(req.file.buffer);
         const compressedImg = readImg
