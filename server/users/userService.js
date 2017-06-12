@@ -1,5 +1,6 @@
 const jwtToken = require('../util/jwtToken');
 const pushUtil = require('../pushNotification/pushUtil');
+const isEmpty = require('lodash/isEmpty');
 
 class Service {
     constructor(dao, commonDao) {
@@ -59,8 +60,7 @@ class Service {
     getUserPushToken = userId => this.dao.getUserPushToken(userId);
     createUser = async loggedInUser => {
         const user = await this.dao.getUserWithEmail(loggedInUser.email);
-
-        if (Boolean(user)) {
+        if (!isEmpty(user)) {
             this.updateUser(user.id, loggedInUser);
             return {
                 ...user,
