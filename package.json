@@ -19,6 +19,7 @@
     "cron": "^1.2.1",
     "debug": "~2.1.1",
     "express": "~4.12.2",
+    "express-graphql": "^0.6.6",
     "express-jwt": "^5.1.0",
     "express-validator": "^2.20.8",
     "graphql": "^0.10.1",

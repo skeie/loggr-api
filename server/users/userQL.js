@@ -20,8 +20,24 @@ const userType = new GraphQLObjectType({
         },
         name: {
             type: GraphQLString,
-            description: 'users name'
-        }
+            description: 'users name',
+        },
+        image: {
+            type: GraphQLString,
+            description: 'users image',
+        },
+        weeklyTraining: {
+            type: GraphQLInt,
+            description: 'number of trainings each week',
+        },
+        streak: {
+            type: GraphQLInt,
+            description: 'user current streak',
+        },
+        email: {
+            type: GraphQLString,
+            description: 'users email',
+        },
     },
 });
 
@@ -31,14 +47,7 @@ const queryType = new GraphQLObjectType({
     fields: {
         user: {
             type: userType,
-            resolve: () =>
-                new Promise(resolve => {
-                    console.log('hit?');
-                    resolve({
-                        id: '1337',
-                        name: 'lol'
-                    });
-                }),
+            resolve: service.getAllUserz,
         },
     },
 });

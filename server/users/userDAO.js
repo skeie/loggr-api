@@ -65,9 +65,13 @@ class Dao {
     };
 
     getAllUsers = () =>
-        this.db.any('select * from users').catch(err => {
-            console.log('err in getAllUsers', err);
-        });
+        this.db
+            .any(
+                'select id, name, weekly_training as "weeklyTraining", streak,  image, email from users',
+            )
+            .catch(err => {
+                console.log('err in getAllUsers', err);
+            });
 }
 
 module.exports = Dao;

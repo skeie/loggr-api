@@ -26,7 +26,7 @@ class Service {
 
     getAllUsers = () => this.dao.getAllUsers();
 
-    getAllUserz = () => this.dao.getAllUsers().then(data => data);
+    getAllUserz = () => this.dao.getAllUsers().then(data => data[0]);
 
     setStreakToNull = userId => this.dao.setStreakToNull();
 
