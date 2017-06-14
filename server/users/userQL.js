@@ -5,6 +5,7 @@ const {
     GraphQLInt,
     GraphQLSchema,
     GraphQLID,
+    GraphQLList,
 } = require('graphql');
 
 const Service = require('./userService');
@@ -45,6 +46,10 @@ const queryType = new GraphQLObjectType({
     name: 'QueryType',
     description: 'Users',
     fields: {
+        users: {
+            type: new GraphQLList(userType),
+            resolve: service.getAllUsers,
+        },
         user: {
             type: userType,
             resolve: service.getAllUserz,
