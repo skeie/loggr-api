@@ -5,11 +5,7 @@ const {
     GraphQLInt,
     GraphQLSchema,
     GraphQLID,
-    GraphQLList,
 } = require('graphql');
-
-const Service = require('./userService');
-const service = new Service();
 
 const userType = new GraphQLObjectType({
     name: 'Users',
@@ -42,23 +38,4 @@ const userType = new GraphQLObjectType({
     },
 });
 
-const queryType = new GraphQLObjectType({
-    name: 'QueryType',
-    description: 'Users',
-    fields: {
-        users: {
-            type: new GraphQLList(userType),
-            resolve: service.getAllUsers,
-        },
-        user: {
-            type: userType,
-            resolve: service.getAllUserz,
-        },
-    },
-});
-
-const schema = new GraphQLSchema({
-    query: queryType,
-});
-
-module.exports = schema;
+module.exports = userType;

@@ -15,6 +15,10 @@ const favIconPath = '/public/favicon.ico';
 const guilds = require('./guilds/guildRouter');
 const graphqlHTTP = require('express-graphql');
 const userql = require('./users/userQL');
+const schema = require('./graphql/schema');
+
+const auth = require('./util/jwtToken');
+const requireToken = auth.requireAuth();
 
 const favPath = process.env.NODE_ENV === 'prod'
     ? path.resolve('.') + '/server/' + favIconPath
@@ -42,11 +46,19 @@ app.use('/users', users);
 app.use('/images', images);
 app.use('/highscore', highscore);
 app.use('/guilds', guilds);
+
 app.use(
     '/graphql',
+    requireToken,
     graphqlHTTP({
-        schema: userql,
+        schema,
         graphiql: true,
+        formatError: error => ({
+            message: error.message,
+            locations: error.locations,
+            stack: error.stack,
+            path: error.path,
+        }),
     }),
 );
 

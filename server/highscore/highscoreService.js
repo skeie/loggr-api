@@ -12,7 +12,8 @@ class Service {
         return this.dao.update(userId, amount);
     };
 
-    getAll = async userId => {
+    getAll = async ({ user }) => {
+        const userId = user.id;
         const { users } = await this.guildService.findGuildBasedOnUserid(
             userId,
         );
@@ -21,7 +22,8 @@ class Service {
             this.dao.getHighScoreBasedOnGuild(users),
             this.dao.get(userId),
         ]);
-        return { highscore, userHighScore };
+
+        return { highscores: highscore, ...userHighScore };
     };
 
     create = userId => {
