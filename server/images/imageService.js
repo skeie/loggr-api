@@ -51,7 +51,8 @@ class Service {
         return Promise.resolve({ hasSomeoneSeenImage, score });
     };
 
-    getUnSeenImage = async id => {
+    getUnSeenImage = async ({ user }) => {
+        const id = user.id;
         const [unSeenImage, numberOfImages] = await Promise.all([
             this.dao.getUnSeenImage(id),
             this.imagesApproveThisWeek(id),
