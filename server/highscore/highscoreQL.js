@@ -1,5 +1,4 @@
 const {
-    GraphQLBoolean,
     GraphQLObjectType,
     GraphQLString,
     GraphQLInt,
@@ -9,7 +8,7 @@ const {
 } = require('graphql');
 
 const highscoreType = new GraphQLObjectType({
-    name: 'highscore',
+    name: 'highscore_ok',
     fields: {
         userid: {
             type: GraphQLString,

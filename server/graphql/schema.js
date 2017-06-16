@@ -13,6 +13,10 @@ const highscoreType = require('../highscore/highscoreQL');
 const HighscoreService = require('../highscore/highscoreService');
 const highscoreService = new HighscoreService();
 
+const imageType = require('../images/imageQL');
+const ImageService = require('../images/imageService');
+const imageService = new ImageService();
+
 const rootQuery = new GraphQLObjectType({
     name: 'rootQuery',
     description: 'the mother of all queries',
@@ -29,6 +33,11 @@ const rootQuery = new GraphQLObjectType({
             type: highscoreType,
             resolve: (parentValue, args, request) =>
                 highscoreService.getAll(request),
+        },
+        unseenImage: {
+            type: imageType,
+            resolve: (parentValue, args, request) =>
+                imageService.getUnSeenImage(request),
         },
     },
 });
