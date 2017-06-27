@@ -20,7 +20,9 @@ const multer = Multer({
 
 router.get('/unSeen', requireToken, async (req, response) => {
     try {
-        const unSeenImgs = await Service.getUnSeenImage(req.user.id);
+        const unSeenImgs = await Service.getUnSeenImage({
+            user: { id: req.user.id },
+        });
         response.json(unSeenImgs);
     } catch (error) {
         console.log('error in unseen router', error);
